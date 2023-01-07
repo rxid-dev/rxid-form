@@ -6,10 +6,6 @@ function App() {
     e.preventDefault();
     const formData: FormData = new FormData(e.target);
     console.log(Object.fromEntries(formData.entries()));
-    // for (let i of Object.entries(formData)) {
-    //   console.log(i);
-    // }
-    // console.log(formData.get("nama"));
   };
 
   return (
@@ -60,6 +56,17 @@ function App() {
                 className="form-control"
                 name="age"
                 placeholder="Masukkan usia Anda"
+              />
+            </div>
+
+            <div className="mb-3">
+              <label className="mb-1" htmlFor="name">
+                Alamat
+              </label>
+              <textarea
+                className="form-control"
+                name="address"
+                placeholder="Masukkan alamat Anda"
               />
             </div>
 
