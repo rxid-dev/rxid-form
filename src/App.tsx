@@ -1,11 +1,22 @@
+import { useState } from "react";
 import "./App.scss";
 import { Components } from "./shared/components";
+import { StatusPerkawinanModel } from "./shared/model";
 
 function App() {
+  const [state] = useState({
+    statusPerkawinanOptions: StatusPerkawinanModel.createList(),
+  });
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const formData: FormData = new FormData(e.target);
-    console.log(Object.fromEntries(formData.entries()));
+    const { maritalStatus, ...dto }: { [key: string]: any } =
+      Object.fromEntries(formData.entries()) || {};
+    dto.maritalStatus = StatusPerkawinanModel.getById(
+      maritalStatus ? +maritalStatus : null
+    );
+    console.log(dto);
   };
 
   return (
@@ -68,6 +79,20 @@ function App() {
                 name="address"
                 placeholder="Masukkan alamat Anda"
               />
+            </div>
+
+            <div className="mb-3">
+              <label className="mb-1" htmlFor="name">
+                Status Perkawinan
+              </label>
+              <select className="form-select" name="maritalStatus">
+                <option value="">Pilih status perkawinan</option>
+                {state.statusPerkawinanOptions.map((statusPerkawinan) => (
+                  <option value={statusPerkawinan.id} key={statusPerkawinan.id}>
+                    {statusPerkawinan.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <button className="btn btn-primary">
