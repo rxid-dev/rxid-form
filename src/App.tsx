@@ -1,26 +1,40 @@
 import { useState } from "react";
 import "./App.scss";
 import { Components } from "./shared/components";
-import { JenisKelamin, StatusPerkawinanModel } from "./shared/model";
+import {
+  CheckboxModel,
+  HobiModel,
+  JenisKelaminModel,
+  StatusPerkawinanModel,
+} from "./shared/model";
 
 function App() {
-  const [state] = useState({
+  const [state, setState] = useState({
     statusPerkawinanList: StatusPerkawinanModel.createList(),
-    jenisKelaminList: JenisKelamin.createList(),
+    jenisKelaminList: JenisKelaminModel.createList(),
+    hobiList: CheckboxModel.createList(HobiModel.createList()),
   });
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const formData: FormData = new FormData(e.target);
-    const { maritalStatus, jenisKelamin, ...dto }: { [key: string]: any } =
-      Object.fromEntries(formData.entries()) || {};
+    const {
+      maritalStatus,
+      jenisKelamin,
+      termAndCondition,
+      ...dto
+    }: { [key: string]: any } = Object.fromEntries(formData.entries()) || {};
     dto.maritalStatus = StatusPerkawinanModel.getById(
       maritalStatus ? +maritalStatus : null
     );
 
-    dto.jenisKelamin = JenisKelamin.getById(
+    dto.jenisKelamin = JenisKelaminModel.getById(
       jenisKelamin ? +jenisKelamin : null
     );
+
+    dto.hobi = CheckboxModel.getValues(state.hobiList);
+
+    dto.termAndCondition = !!termAndCondition;
 
     console.log(dto);
   };
@@ -102,7 +116,7 @@ function App() {
             </div>
 
             <div className="mb-3">
-              <label className="mb-1" htmlFor="name">
+              <label className="mb-1" htmlFor="jenisKelamin">
                 Jenis Kelamin
               </label>
               {state.jenisKelaminList.map((jenisKelamin) => (
@@ -122,6 +136,50 @@ function App() {
                   </label>
                 </div>
               ))}
+            </div>
+
+            <div className="mb-3">
+              <label className="mb-1" htmlFor="hobi">
+                Hobi
+              </label>
+              {state.hobiList.map((hobi, i) => (
+                <div className="form-check" key={hobi.option.id}>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id={"hobi" + hobi.option.id}
+                    value={hobi.option.id}
+                    onChange={(e) => {
+                      const hobiList = state.hobiList;
+                      hobiList[i].isChecked = e.target.checked;
+                      setState((state) => ({
+                        ...state,
+                        hobiList,
+                      }));
+                    }}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor={"hobi" + hobi.option.id}
+                  >
+                    {hobi.option.name}
+                  </label>
+                </div>
+              ))}
+            </div>
+
+            <div className="mb-3">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="termAndCondition"
+                  name="termAndCondition"
+                />
+                <label className="form-check-label" htmlFor="termAndCondition">
+                  Term and condition
+                </label>
+              </div>
             </div>
 
             <button className="btn btn-primary">
