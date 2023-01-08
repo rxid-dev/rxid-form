@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.scss";
 import { Components } from "./shared/components";
 import {
@@ -13,7 +13,52 @@ function App() {
     statusPerkawinanList: StatusPerkawinanModel.createList(),
     jenisKelaminList: JenisKelaminModel.createList(),
     hobiList: CheckboxModel.createList(HobiModel.createList()),
+    record: {
+      name: "",
+      dob: "",
+      age: "",
+      address: "",
+      maritalStatus: 0,
+      gender: 0,
+      termAndCondition: false,
+    },
   });
+
+  useEffect(() => {
+    setTimeout(() => {
+      console.log("INFO: Received data from api");
+      const { hobi, ...record } = {
+        name: "John Doe",
+        dob: "1990-03-31",
+        age: "24",
+        address: "Jln. Cendrawasi No.88",
+        maritalStatus: 3,
+        gender: 2,
+        termAndCondition: true,
+        hobi: HobiModel.createList().slice(0, 2),
+      };
+      const hobiList = state.hobiList.map((item) => {
+        item.isChecked = hobi.findIndex((h) => h.id === item.option.id) !== -1;
+        return item;
+      });
+      setState((state) => ({
+        ...state,
+        record,
+        hobiList,
+      }));
+
+      const maritalStatusElement = document.getElementsByName(
+        "maritalStatus"
+      )[0] as HTMLSelectElement;
+      maritalStatusElement.value = String(record.maritalStatus);
+
+      const genderElements = document.getElementsByName("jenisKelamin");
+      for (let i = 0; i < genderElements.length; i++) {
+        const genderElement = genderElements[i] as HTMLInputElement;
+        genderElement.checked = +genderElement.value === record.gender;
+      }
+    }, 1000);
+  }, []);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -56,6 +101,7 @@ function App() {
               className="form-control"
               name="name"
               placeholder="Masukkan nama Anda"
+              defaultValue={state.record.name}
             />
           </Components.Form.Group>
 
@@ -65,6 +111,7 @@ function App() {
               className="form-control"
               name="dob"
               placeholder="Pilih tanggal lahir Anda"
+              defaultValue={state.record.dob}
             />
           </Components.Form.Group>
 
@@ -74,6 +121,7 @@ function App() {
               className="form-control"
               name="age"
               placeholder="Masukkan usia Anda"
+              defaultValue={state.record.age}
             />
           </Components.Form.Group>
 
@@ -82,11 +130,16 @@ function App() {
               className="form-control"
               name="address"
               placeholder="Masukkan alamat Anda"
+              defaultValue={state.record.address}
             />
           </Components.Form.Group>
 
           <Components.Form.Group label="Status Perkawinan" required={true}>
-            <select className="form-select" name="maritalStatus">
+            <select
+              className="form-select"
+              name="maritalStatus"
+              defaultValue={state.record.maritalStatus}
+            >
               <option value="">Pilih status perkawinan</option>
               {state.statusPerkawinanList.map((statusPerkawinan) => (
                 <option value={statusPerkawinan.id} key={statusPerkawinan.id}>
@@ -105,6 +158,7 @@ function App() {
                   name="jenisKelamin"
                   id={"jenisKelamin" + jenisKelamin.id}
                   value={jenisKelamin.id}
+                  defaultChecked={jenisKelamin.id === state.record.gender}
                 />
                 <label
                   className="form-check-label"
@@ -124,6 +178,7 @@ function App() {
                   type="checkbox"
                   id={"hobi" + hobi.option.id}
                   value={hobi.option.id}
+                  checked={hobi.isChecked}
                   onChange={(e) => {
                     const hobiList = state.hobiList;
                     hobiList[i].isChecked = e.target.checked;
@@ -150,6 +205,7 @@ function App() {
                 type="checkbox"
                 id="termAndCondition"
                 name="termAndCondition"
+                defaultChecked={state.record.termAndCondition}
               />
               <label className="form-check-label" htmlFor="termAndCondition">
                 Term and condition
