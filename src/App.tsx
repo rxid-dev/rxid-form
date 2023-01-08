@@ -48,146 +48,120 @@ function App() {
         .map((val, index) => {
           return <Components.CustomComponent key={val + index + 1} />;
         })}
-      <div className="card my-4">
-        <div className="card-header">
-          <h2 className="mb-0">User Form</h2>
-        </div>
-        <div className="card-body">
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label className="mb-1" htmlFor="name">
-                Nama
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                name="name"
-                placeholder="Masukkan nama Anda"
-              />
-            </div>
+      <Components.Card header="User Form">
+        <form onSubmit={handleSubmit}>
+          <Components.Form.Group label="Nama" required={true}>
+            <input
+              type="text"
+              className="form-control"
+              name="name"
+              placeholder="Masukkan nama Anda"
+            />
+          </Components.Form.Group>
 
-            <div className="mb-3">
-              <label className="mb-1" htmlFor="dob">
-                Tanggal Lahir
-              </label>
-              <input
-                type="date"
-                className="form-control"
-                name="dob"
-                placeholder="Pilih tanggal lahir Anda"
-              />
-            </div>
+          <Components.Form.Group label="Tanggal Lahir" required={true}>
+            <input
+              type="date"
+              className="form-control"
+              name="dob"
+              placeholder="Pilih tanggal lahir Anda"
+            />
+          </Components.Form.Group>
 
-            <div className="mb-3">
-              <label className="mb-1" htmlFor="age">
-                Usia
-              </label>
-              <input
-                type="number"
-                className="form-control"
-                name="age"
-                placeholder="Masukkan usia Anda"
-              />
-            </div>
+          <Components.Form.Group label="Usia" required={true}>
+            <input
+              type="number"
+              className="form-control"
+              name="age"
+              placeholder="Masukkan usia Anda"
+            />
+          </Components.Form.Group>
 
-            <div className="mb-3">
-              <label className="mb-1" htmlFor="address">
-                Alamat
-              </label>
-              <textarea
-                className="form-control"
-                name="address"
-                placeholder="Masukkan alamat Anda"
-              />
-            </div>
+          <Components.Form.Group label="Alamat" required={true}>
+            <textarea
+              className="form-control"
+              name="address"
+              placeholder="Masukkan alamat Anda"
+            />
+          </Components.Form.Group>
 
-            <div className="mb-3">
-              <label className="mb-1" htmlFor="maritalStatus">
-                Status Perkawinan
-              </label>
-              <select className="form-select" name="maritalStatus">
-                <option value="">Pilih status perkawinan</option>
-                {state.statusPerkawinanList.map((statusPerkawinan) => (
-                  <option value={statusPerkawinan.id} key={statusPerkawinan.id}>
-                    {statusPerkawinan.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="mb-3">
-              <label className="mb-1" htmlFor="jenisKelamin">
-                Jenis Kelamin
-              </label>
-              {state.jenisKelaminList.map((jenisKelamin) => (
-                <div className="form-check" key={jenisKelamin.id}>
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="jenisKelamin"
-                    id={"jenisKelamin" + jenisKelamin.id}
-                    value={jenisKelamin.id}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor={"jenisKelamin" + jenisKelamin.id}
-                  >
-                    {jenisKelamin.name}
-                  </label>
-                </div>
+          <Components.Form.Group label="Status Perkawinan" required={true}>
+            <select className="form-select" name="maritalStatus">
+              <option value="">Pilih status perkawinan</option>
+              {state.statusPerkawinanList.map((statusPerkawinan) => (
+                <option value={statusPerkawinan.id} key={statusPerkawinan.id}>
+                  {statusPerkawinan.name}
+                </option>
               ))}
-            </div>
+            </select>
+          </Components.Form.Group>
 
-            <div className="mb-3">
-              <label className="mb-1" htmlFor="hobi">
-                Hobi
-              </label>
-              {state.hobiList.map((hobi, i) => (
-                <div className="form-check" key={hobi.option.id}>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id={"hobi" + hobi.option.id}
-                    value={hobi.option.id}
-                    onChange={(e) => {
-                      const hobiList = state.hobiList;
-                      hobiList[i].isChecked = e.target.checked;
-                      setState((state) => ({
-                        ...state,
-                        hobiList,
-                      }));
-                    }}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor={"hobi" + hobi.option.id}
-                  >
-                    {hobi.option.name}
-                  </label>
-                </div>
-              ))}
-            </div>
+          <Components.Form.Group label="Jenis Kelamin" required={true}>
+            {state.jenisKelaminList.map((jenisKelamin) => (
+              <div className="form-check" key={jenisKelamin.id}>
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="jenisKelamin"
+                  id={"jenisKelamin" + jenisKelamin.id}
+                  value={jenisKelamin.id}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor={"jenisKelamin" + jenisKelamin.id}
+                >
+                  {jenisKelamin.name}
+                </label>
+              </div>
+            ))}
+          </Components.Form.Group>
 
-            <div className="mb-3">
-              <div className="form-check">
+          <Components.Form.Group label="Hobi" required={true}>
+            {state.hobiList.map((hobi, i) => (
+              <div className="form-check" key={hobi.option.id}>
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  id="termAndCondition"
-                  name="termAndCondition"
+                  id={"hobi" + hobi.option.id}
+                  value={hobi.option.id}
+                  onChange={(e) => {
+                    const hobiList = state.hobiList;
+                    hobiList[i].isChecked = e.target.checked;
+                    setState((state) => ({
+                      ...state,
+                      hobiList,
+                    }));
+                  }}
                 />
-                <label className="form-check-label" htmlFor="termAndCondition">
-                  Term and condition
+                <label
+                  className="form-check-label"
+                  htmlFor={"hobi" + hobi.option.id}
+                >
+                  {hobi.option.name}
                 </label>
               </div>
-            </div>
+            ))}
+          </Components.Form.Group>
 
-            <button className="btn btn-primary">
-              <em className="fas fa-plus"></em> Add
-            </button>
-          </form>
-        </div>
-      </div>
+          <Components.Form.Group>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="termAndCondition"
+                name="termAndCondition"
+              />
+              <label className="form-check-label" htmlFor="termAndCondition">
+                Term and condition
+              </label>
+            </div>
+          </Components.Form.Group>
+
+          <button className="btn btn-primary">
+            <em className="fas fa-plus"></em> Add
+          </button>
+        </form>
+      </Components.Card>
     </div>
   );
 }
