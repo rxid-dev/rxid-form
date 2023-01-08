@@ -13,20 +13,20 @@ function App() {
     statusPerkawinanList: StatusPerkawinanModel.createList(),
     jenisKelaminList: JenisKelaminModel.createList(),
     hobiList: CheckboxModel.createList(HobiModel.createList()),
-    record: {
-      name: "",
-      dob: "",
-      age: "",
-      address: "",
-      maritalStatus: 0,
-      gender: 0,
-      termAndCondition: false,
-    },
+  });
+
+  const [record, setRecord] = useState<{ [key: string]: any }>({
+    name: "",
+    dob: "",
+    age: "",
+    address: "",
+    maritalStatus: 0,
+    gender: 0,
+    termAndCondition: false,
   });
 
   useEffect(() => {
     setTimeout(() => {
-      console.log("INFO: Received data from api");
       const { hobi, ...record } = {
         name: "John Doe",
         dob: "1990-03-31",
@@ -43,43 +43,26 @@ function App() {
       });
       setState((state) => ({
         ...state,
-        record,
         hobiList,
       }));
-
-      const maritalStatusElement = document.getElementsByName(
-        "maritalStatus"
-      )[0] as HTMLSelectElement;
-      maritalStatusElement.value = String(record.maritalStatus);
-
-      const genderElements = document.getElementsByName("jenisKelamin");
-      for (let i = 0; i < genderElements.length; i++) {
-        const genderElement = genderElements[i] as HTMLInputElement;
-        genderElement.checked = +genderElement.value === record.gender;
-      }
-    }, 1000);
+      setRecord(record);
+    }, 5000);
   }, []);
+
+  const handleOnChange = (e: any) => {
+    setRecord((record) => ({
+      ...record,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const formData: FormData = new FormData(e.target);
-    const {
-      maritalStatus,
-      jenisKelamin,
-      termAndCondition,
-      ...dto
-    }: { [key: string]: any } = Object.fromEntries(formData.entries()) || {};
-    dto.maritalStatus = StatusPerkawinanModel.getById(
-      maritalStatus ? +maritalStatus : null
-    );
+    const { maritalStatus, gender, ...dto } = record;
 
-    dto.jenisKelamin = JenisKelaminModel.getById(
-      jenisKelamin ? +jenisKelamin : null
-    );
-
-    dto.hobi = CheckboxModel.getValues(state.hobiList);
-
-    dto.termAndCondition = !!termAndCondition;
+    dto.maritalStatus = StatusPerkawinanModel.getById(maritalStatus);
+    dto.gender = JenisKelaminModel.getById(gender);
+    dto.hobies = CheckboxModel.getValues(state.hobiList);
 
     console.log(dto);
   };
@@ -101,7 +84,8 @@ function App() {
               className="form-control"
               name="name"
               placeholder="Masukkan nama Anda"
-              defaultValue={state.record.name}
+              value={record.name}
+              onChange={handleOnChange}
             />
           </Components.Form.Group>
 
@@ -111,7 +95,8 @@ function App() {
               className="form-control"
               name="dob"
               placeholder="Pilih tanggal lahir Anda"
-              defaultValue={state.record.dob}
+              value={record.dob}
+              onChange={handleOnChange}
             />
           </Components.Form.Group>
 
@@ -121,7 +106,8 @@ function App() {
               className="form-control"
               name="age"
               placeholder="Masukkan usia Anda"
-              defaultValue={state.record.age}
+              value={record.age}
+              onChange={handleOnChange}
             />
           </Components.Form.Group>
 
@@ -130,7 +116,8 @@ function App() {
               className="form-control"
               name="address"
               placeholder="Masukkan alamat Anda"
-              defaultValue={state.record.address}
+              value={record.address}
+              onChange={handleOnChange}
             />
           </Components.Form.Group>
 
@@ -138,7 +125,8 @@ function App() {
             <select
               className="form-select"
               name="maritalStatus"
-              defaultValue={state.record.maritalStatus}
+              value={record.maritalStatus}
+              onChange={handleOnChange}
             >
               <option value="">Pilih status perkawinan</option>
               {state.statusPerkawinanList.map((statusPerkawinan) => (
@@ -155,10 +143,11 @@ function App() {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="jenisKelamin"
+                  name="gender"
                   id={"jenisKelamin" + jenisKelamin.id}
                   value={jenisKelamin.id}
-                  defaultChecked={jenisKelamin.id === state.record.gender}
+                  checked={jenisKelamin.id === +record.gender}
+                  onChange={handleOnChange}
                 />
                 <label
                   className="form-check-label"
@@ -205,7 +194,13 @@ function App() {
                 type="checkbox"
                 id="termAndCondition"
                 name="termAndCondition"
-                defaultChecked={state.record.termAndCondition}
+                checked={!!record.termAndCondition}
+                onChange={(e) =>
+                  setRecord((record) => ({
+                    ...record,
+                    termAndCondition: e.target.checked,
+                  }))
+                }
               />
               <label className="form-check-label" htmlFor="termAndCondition">
                 Term and condition
