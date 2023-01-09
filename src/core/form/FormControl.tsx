@@ -1,4 +1,4 @@
-import { ValidationError } from "./type/ValidatioError";
+import { ValidationError } from "./type/ValidationError";
 import { ValidatorFN } from "./type/ValidationFN";
 export class FormControl {
   public errors: ValidationError;

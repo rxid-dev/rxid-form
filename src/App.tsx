@@ -11,7 +11,7 @@ import {
 import { Validators } from "./shared/validators";
 
 function App() {
-  const [state, setState] = useState({
+  const [state] = useState({
     statusPerkawinanList: StatusPerkawinanModel.createList(),
     jenisKelaminList: JenisKelaminModel.createList(),
     hobiList: HobiModel.createList(),
@@ -39,19 +39,17 @@ function App() {
 
   useEffect(() => {
     setTimeout(() => {
-      const { hobi, ...record } = {
+      const record = {
         name: "John Doe",
         dob: "1990-03-31",
         age: "24",
         address: "Jln. Cendrawasi No.88",
-        maritalStatus: 3,
-        gender: 2,
+        maritalStatus: StatusPerkawinanModel.createList()[0],
+        gender: JenisKelaminModel.createList()[0],
         termAndCondition: true,
         hobi: HobiModel.createList().slice(0, 2),
       };
-      setState((state) => ({
-        ...state,
-      }));
+      form.patchValue(record);
     }, 5000);
   }, []);
 
@@ -64,6 +62,7 @@ function App() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     form.validate();
+    console.log(form.getValue());
     if (form.getIsValid()) {
       console.log(form.getValue());
     }
@@ -182,8 +181,18 @@ function App() {
                   : "")
               }
               name="maritalStatus"
-              onChange={handleOnChange}
-              value={form.get("maritalStatus").value}
+              onChange={(e) => {
+                let value: any = e.target.value;
+                if (value) {
+                  const indexOfOption = state.statusPerkawinanList.findIndex(
+                    (statusPerkawinan) =>
+                      statusPerkawinan.id === +e.target.value
+                  );
+                  value = state.statusPerkawinanList[indexOfOption];
+                }
+                form.patchValue({ maritalStatus: value });
+              }}
+              value={form.get("maritalStatus").value?.id}
             >
               <option value="">Pilih status perkawinan</option>
               {state.statusPerkawinanList.map((statusPerkawinan) => (
@@ -216,8 +225,10 @@ function App() {
                   name="gender"
                   id={"jenisKelamin" + jenisKelamin.id}
                   value={jenisKelamin.id}
-                  checked={jenisKelamin.id === +form.get("gender").value}
-                  onChange={handleOnChange}
+                  checked={jenisKelamin.id === +form.get("gender").value?.id}
+                  onChange={(e) => {
+                    form.patchValue({ gender: jenisKelamin });
+                  }}
                 />
                 <label
                   className="form-check-label"

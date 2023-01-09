@@ -1,4 +1,4 @@
-import { ValidationError } from "../../core/form/type/ValidatioError";
+import { ValidationError } from "../../core/form/type/ValidationError";
 import { ValidatorFN } from "../../core/form/type/ValidationFN";
 export const minLengthValidator = (
   minLength: number,

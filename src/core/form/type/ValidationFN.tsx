@@ -1,3 +1,3 @@
-import { ValidationError } from "./ValidatioError";
+import { ValidationError } from "./ValidationError";
 
 export type ValidatorFN = (value: any) => ValidationError;
