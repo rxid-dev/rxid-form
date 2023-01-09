@@ -3,7 +3,6 @@ import "./App.scss";
 import { FormControl } from "./core/form";
 import { Components } from "./shared/components";
 import {
-  CheckboxModel,
   HobiModel,
   JenisKelaminModel,
   StatusPerkawinanModel,
@@ -14,33 +13,40 @@ function App() {
   const [state, setState] = useState({
     statusPerkawinanList: StatusPerkawinanModel.createList(),
     jenisKelaminList: JenisKelaminModel.createList(),
-    hobiList: CheckboxModel.createList(HobiModel.createList()),
+    hobiList: HobiModel.createList(),
   });
 
   const [record, setRecord] = useState<{ [key: string]: any }>({
     name: new FormControl([
-      "",
+      "Jane Doe",
       [
         Validators.required("Nama wajib diisi"),
         Validators.minLength(4, "Nama tidak boleh kurang dari 4 karakter"),
       ],
     ]),
     dob: new FormControl([
-      "",
+      "1992-02-29",
       Validators.required("Tanggal lahir wajib dipilih"),
     ]),
-    age: new FormControl(["", Validators.required("Usia wajib diisi")]),
-    address: new FormControl(["", Validators.required("Alamat wajib diisi")]),
+    age: new FormControl([30, Validators.required("Usia wajib diisi")]),
+    address: new FormControl([
+      "Jln. Cendrawasi",
+      Validators.required("Alamat wajib diisi"),
+    ]),
     maritalStatus: new FormControl([
-      "",
+      1,
       Validators.required("Statis perkawinan wajib dipilih"),
     ]),
     gender: new FormControl([
-      "",
+      1,
       Validators.required("Jenis kelamin wajib dipilih"),
     ]),
+    hobi: new FormControl([
+      HobiModel.createList().slice(0, 2),
+      Validators.required("Hobi wajib dipilih"),
+    ]),
     termAndCondition: new FormControl([
-      false,
+      true,
       Validators.required("Syarat dan ketentuan wajib disetujui"),
     ]),
   });
@@ -57,13 +63,8 @@ function App() {
         termAndCondition: true,
         hobi: HobiModel.createList().slice(0, 2),
       };
-      const hobiList = state.hobiList.map((item) => {
-        item.isChecked = hobi.findIndex((h) => h.id === item.option.id) !== -1;
-        return item;
-      });
       setState((state) => ({
         ...state,
-        hobiList,
       }));
       // setRecord(record);
     }, 5000);
@@ -89,8 +90,6 @@ function App() {
     const { maritalStatus, gender, ...dto } = value;
     dto.maritalStatus = StatusPerkawinanModel.getById(+maritalStatus);
     dto.gender = JenisKelaminModel.getById(+gender);
-    dto.hobies = CheckboxModel.getValues(state.hobiList);
-
     console.log(dto);
   };
 
@@ -233,30 +232,50 @@ function App() {
 
           <Components.Form.Group label="Hobi" required={true}>
             {state.hobiList.map((hobi, i) => (
-              <div className="form-check" key={hobi.option.id}>
+              <div className="form-check" key={hobi.id}>
                 <input
-                  className="form-check-input"
+                  className={
+                    "form-check-input " +
+                    (record.hobi.getIsValid() ? "is-valid" : "is-invalid")
+                  }
                   type="checkbox"
-                  id={"hobi" + hobi.option.id}
-                  value={hobi.option.id}
-                  checked={hobi.isChecked}
+                  id={"hobi" + hobi.id}
+                  value={hobi.id}
+                  checked={
+                    (record.hobi.value || []).findIndex(
+                      (val: HobiModel) => val.id === hobi.id
+                    ) !== -1
+                  }
                   onChange={(e) => {
-                    const hobiList = state.hobiList;
-                    hobiList[i].isChecked = e.target.checked;
-                    setState((state) => ({
-                      ...state,
-                      hobiList,
+                    const control: FormControl = record.hobi;
+                    const value = control.value || [];
+                    if (e.target.checked) {
+                      value.push(hobi);
+                    } else {
+                      const indexOfHobi = value.findIndex(
+                        (val: HobiModel) => val.id === hobi.id
+                      );
+                      if (indexOfHobi !== -1) {
+                        value.splice(indexOfHobi, 1);
+                      }
+                    }
+                    control.patchValue(value.length > 0 ? value : "");
+                    setRecord((record) => ({
+                      ...record,
+                      hobi: control,
                     }));
                   }}
                 />
-                <label
-                  className="form-check-label"
-                  htmlFor={"hobi" + hobi.option.id}
-                >
-                  {hobi.option.name}
+                <label className="form-check-label" htmlFor={"hobi" + hobi.id}>
+                  {hobi.name}
                 </label>
               </div>
             ))}
+            {record.hobi.errors && (
+              <small className="text-danger">
+                {record.hobi.errors.message}
+              </small>
+            )}
           </Components.Form.Group>
 
           <Components.Form.Group>
