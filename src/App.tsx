@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.scss";
+import { FormControl } from "./core/form";
 import { Components } from "./shared/components";
 import {
   CheckboxModel,
@@ -7,6 +8,7 @@ import {
   JenisKelaminModel,
   StatusPerkawinanModel,
 } from "./shared/model";
+import { Validators } from "./shared/validators";
 
 function App() {
   const [state, setState] = useState({
@@ -16,13 +18,31 @@ function App() {
   });
 
   const [record, setRecord] = useState<{ [key: string]: any }>({
-    name: "",
-    dob: "",
-    age: "",
-    address: "",
-    maritalStatus: 0,
-    gender: 0,
-    termAndCondition: false,
+    name: new FormControl([
+      "",
+      [
+        Validators.required("Nama wajib diisi"),
+        Validators.minLength(4, "Nama tidak boleh kurang dari 4 karakter"),
+      ],
+    ]),
+    dob: new FormControl([
+      "",
+      Validators.required("Tanggal lahir wajib dipilih"),
+    ]),
+    age: new FormControl(["", Validators.required("Usia wajib diisi")]),
+    address: new FormControl(["", Validators.required("Alamat wajib diisi")]),
+    maritalStatus: new FormControl([
+      "",
+      Validators.required("Statis perkawinan wajib dipilih"),
+    ]),
+    gender: new FormControl([
+      "",
+      Validators.required("Jenis kelamin wajib dipilih"),
+    ]),
+    termAndCondition: new FormControl([
+      false,
+      Validators.required("Syarat dan ketentuan wajib disetujui"),
+    ]),
   });
 
   useEffect(() => {
@@ -45,23 +65,30 @@ function App() {
         ...state,
         hobiList,
       }));
-      setRecord(record);
+      // setRecord(record);
     }, 5000);
   }, []);
 
   const handleOnChange = (e: any) => {
+    const control: FormControl = record[e.target.name];
+    control.patchValue(e.target.value);
     setRecord((record) => ({
       ...record,
-      [e.target.name]: e.target.value,
+      [e.target.name]: control,
     }));
   };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const { maritalStatus, gender, ...dto } = record;
+    const value: { [key: string]: any } = {};
+    Object.keys(record).forEach((key) => {
+      value[key] = record[key].value;
+    });
 
-    dto.maritalStatus = StatusPerkawinanModel.getById(maritalStatus);
-    dto.gender = JenisKelaminModel.getById(gender);
+    console.log(value);
+    const { maritalStatus, gender, ...dto } = value;
+    dto.maritalStatus = StatusPerkawinanModel.getById(+maritalStatus);
+    dto.gender = JenisKelaminModel.getById(+gender);
     dto.hobies = CheckboxModel.getValues(state.hobiList);
 
     console.log(dto);
@@ -81,52 +108,84 @@ function App() {
           <Components.Form.Group label="Nama" required={true}>
             <input
               type="text"
-              className="form-control"
+              className={
+                "form-control " +
+                (record.name.getIsValid() ? "is-valid" : "is-invalid")
+              }
               name="name"
               placeholder="Masukkan nama Anda"
-              value={record.name}
               onChange={handleOnChange}
+              {...record.name}
             />
+            {record.name.errors && (
+              <small className="text-danger">
+                {record.name.errors.message}
+              </small>
+            )}
           </Components.Form.Group>
 
           <Components.Form.Group label="Tanggal Lahir" required={true}>
             <input
               type="date"
-              className="form-control"
+              className={
+                "form-control " +
+                (record.dob.getIsValid() ? "is-valid" : "is-invalid")
+              }
               name="dob"
               placeholder="Pilih tanggal lahir Anda"
-              value={record.dob}
               onChange={handleOnChange}
+              {...record.dob}
             />
+            {record.dob.errors && (
+              <small className="text-danger">{record.dob.errors.message}</small>
+            )}
           </Components.Form.Group>
 
           <Components.Form.Group label="Usia" required={true}>
             <input
               type="number"
-              className="form-control"
+              className={
+                "form-control " +
+                (record.age.getIsValid() ? "is-valid" : "is-invalid")
+              }
               name="age"
               placeholder="Masukkan usia Anda"
-              value={record.age}
               onChange={handleOnChange}
+              {...record.age}
             />
+            {record.age.errors && (
+              <small className="text-danger">{record.age.errors.message}</small>
+            )}
           </Components.Form.Group>
 
           <Components.Form.Group label="Alamat" required={true}>
             <textarea
-              className="form-control"
+              className={
+                "form-control " +
+                (record.address.getIsValid() ? "is-valid" : "is-invalid")
+              }
               name="address"
               placeholder="Masukkan alamat Anda"
               value={record.address}
               onChange={handleOnChange}
+              {...record.address}
             />
+            {record.address.errors && (
+              <small className="text-danger">
+                {record.address.errors.message}
+              </small>
+            )}
           </Components.Form.Group>
 
           <Components.Form.Group label="Status Perkawinan" required={true}>
             <select
-              className="form-select"
+              className={
+                "form-select " +
+                (record.maritalStatus.getIsValid() ? "is-valid" : "is-invalid")
+              }
               name="maritalStatus"
-              value={record.maritalStatus}
               onChange={handleOnChange}
+              {...record.maritalStatus}
             >
               <option value="">Pilih status perkawinan</option>
               {state.statusPerkawinanList.map((statusPerkawinan) => (
@@ -135,18 +194,26 @@ function App() {
                 </option>
               ))}
             </select>
+            {record.maritalStatus.errors && (
+              <small className="text-danger">
+                {record.maritalStatus.errors.message}
+              </small>
+            )}
           </Components.Form.Group>
 
           <Components.Form.Group label="Jenis Kelamin" required={true}>
             {state.jenisKelaminList.map((jenisKelamin) => (
               <div className="form-check" key={jenisKelamin.id}>
                 <input
-                  className="form-check-input"
+                  className={
+                    "form-check-input " +
+                    (record.gender.getIsValid() ? "is-valid" : "is-invalid")
+                  }
                   type="radio"
                   name="gender"
                   id={"jenisKelamin" + jenisKelamin.id}
                   value={jenisKelamin.id}
-                  checked={jenisKelamin.id === +record.gender}
+                  checked={jenisKelamin.id === +record.gender.value}
                   onChange={handleOnChange}
                 />
                 <label
@@ -157,6 +224,11 @@ function App() {
                 </label>
               </div>
             ))}
+            {record.gender.errors && (
+              <small className="text-danger">
+                {record.gender.errors.message}
+              </small>
+            )}
           </Components.Form.Group>
 
           <Components.Form.Group label="Hobi" required={true}>
@@ -190,22 +262,34 @@ function App() {
           <Components.Form.Group>
             <div className="form-check">
               <input
-                className="form-check-input"
+                className={
+                  "form-check-input " +
+                  (record.termAndCondition.getIsValid()
+                    ? "is-valid"
+                    : "is-invalid")
+                }
                 type="checkbox"
                 id="termAndCondition"
                 name="termAndCondition"
-                checked={!!record.termAndCondition}
-                onChange={(e) =>
+                checked={!!record.termAndCondition.value}
+                onChange={(e) => {
+                  const control = record.termAndCondition;
+                  control.patchValue(e.target.checked);
                   setRecord((record) => ({
                     ...record,
-                    termAndCondition: e.target.checked,
-                  }))
-                }
+                    termAndCondition: control,
+                  }));
+                }}
               />
               <label className="form-check-label" htmlFor="termAndCondition">
                 Term and condition
               </label>
             </div>
+            {record.termAndCondition.errors && (
+              <small className="text-danger">
+                {record.termAndCondition.errors.message}
+              </small>
+            )}
           </Components.Form.Group>
 
           <button className="btn btn-primary">
