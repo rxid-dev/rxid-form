@@ -3,20 +3,33 @@ import { ValidatorFN } from "./type/ValidationFN";
 export class FormControl {
   public errors: ValidationError;
   public value: any;
+  private touched: boolean;
+  private dirty: boolean;
   constructor(
     private props: [any] | [any, ValidatorFN | Array<ValidatorFN> | null]
   ) {
     this.value = props[0];
     this.errors = this.createErrors(props[0]);
+    this.touched = false;
+    this.dirty = false;
   }
 
   public patchValue(value: any): void {
     this.value = value;
     this.errors = this.createErrors(value);
+    this.markAsTouched();
   }
 
   public getIsValid(): boolean {
     return !this.errors;
+  }
+
+  public markAsTouched(): void {
+    this.touched = true;
+  }
+
+  public markAsDirty(): void {
+    this.dirty = true;
   }
 
   private createErrors(value: any): ValidationError {

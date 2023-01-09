@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.scss";
 import { FormControl } from "./core/form";
+import { useForm } from "./core/form/useForm";
 import { Components } from "./shared/components";
 import {
   HobiModel,
@@ -16,39 +17,24 @@ function App() {
     hobiList: HobiModel.createList(),
   });
 
-  const [record, setRecord] = useState<{ [key: string]: any }>({
-    name: new FormControl([
-      "Jane Doe",
+  const form = useForm({
+    name: [
+      "",
       [
         Validators.required("Nama wajib diisi"),
         Validators.minLength(4, "Nama tidak boleh kurang dari 4 karakter"),
       ],
-    ]),
-    dob: new FormControl([
-      "1992-02-29",
-      Validators.required("Tanggal lahir wajib dipilih"),
-    ]),
-    age: new FormControl([30, Validators.required("Usia wajib diisi")]),
-    address: new FormControl([
-      "Jln. Cendrawasi",
-      Validators.required("Alamat wajib diisi"),
-    ]),
-    maritalStatus: new FormControl([
-      1,
-      Validators.required("Statis perkawinan wajib dipilih"),
-    ]),
-    gender: new FormControl([
-      1,
-      Validators.required("Jenis kelamin wajib dipilih"),
-    ]),
-    hobi: new FormControl([
-      HobiModel.createList().slice(0, 2),
-      Validators.required("Hobi wajib dipilih"),
-    ]),
-    termAndCondition: new FormControl([
-      true,
+    ],
+    dob: ["", Validators.required("Tanggal lahir wajib dipilih")],
+    age: ["", Validators.required("Usia wajib diisi")],
+    address: ["", Validators.required("Alamat wajib diisi")],
+    maritalStatus: ["", Validators.required("Statis perkawinan wajib dipilih")],
+    gender: ["", Validators.required("Jenis kelamin wajib dipilih")],
+    hobi: ["", Validators.required("Hobi wajib dipilih")],
+    termAndCondition: [
+      false,
       Validators.required("Syarat dan ketentuan wajib disetujui"),
-    ]),
+    ],
   });
 
   useEffect(() => {
@@ -66,31 +52,21 @@ function App() {
       setState((state) => ({
         ...state,
       }));
-      // setRecord(record);
     }, 5000);
   }, []);
 
   const handleOnChange = (e: any) => {
-    const control: FormControl = record[e.target.name];
-    control.patchValue(e.target.value);
-    setRecord((record) => ({
-      ...record,
-      [e.target.name]: control,
-    }));
+    form.patchValue({
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const value: { [key: string]: any } = {};
-    Object.keys(record).forEach((key) => {
-      value[key] = record[key].value;
-    });
-
-    console.log(value);
-    const { maritalStatus, gender, ...dto } = value;
-    dto.maritalStatus = StatusPerkawinanModel.getById(+maritalStatus);
-    dto.gender = JenisKelaminModel.getById(+gender);
-    console.log(dto);
+    form.validate();
+    if (form.getIsValid()) {
+      console.log(form.getValue());
+    }
   };
 
   return (
@@ -109,16 +85,20 @@ function App() {
               type="text"
               className={
                 "form-control " +
-                (record.name.getIsValid() ? "is-valid" : "is-invalid")
+                (form.get("name").touched
+                  ? form.get("name").getIsValid()
+                    ? "is-valid"
+                    : "is-invalid"
+                  : "")
               }
               name="name"
               placeholder="Masukkan nama Anda"
               onChange={handleOnChange}
-              {...record.name}
+              value={form.get("name").value}
             />
-            {record.name.errors && (
+            {form.get("name").touched && form.get("name").errors && (
               <small className="text-danger">
-                {record.name.errors.message}
+                {form.get("name").errors.message}
               </small>
             )}
           </Components.Form.Group>
@@ -128,15 +108,21 @@ function App() {
               type="date"
               className={
                 "form-control " +
-                (record.dob.getIsValid() ? "is-valid" : "is-invalid")
+                (form.get("dob").touched
+                  ? form.get("dob").getIsValid()
+                    ? "is-valid"
+                    : "is-invalid"
+                  : "")
               }
               name="dob"
               placeholder="Pilih tanggal lahir Anda"
               onChange={handleOnChange}
-              {...record.dob}
+              value={form.get("dob").value}
             />
-            {record.dob.errors && (
-              <small className="text-danger">{record.dob.errors.message}</small>
+            {form.get("dob").touched && form.get("dob").errors && (
+              <small className="text-danger">
+                {form.get("dob").errors.message}
+              </small>
             )}
           </Components.Form.Group>
 
@@ -145,15 +131,21 @@ function App() {
               type="number"
               className={
                 "form-control " +
-                (record.age.getIsValid() ? "is-valid" : "is-invalid")
+                (form.get("age").touched
+                  ? form.get("age").getIsValid()
+                    ? "is-valid"
+                    : "is-invalid"
+                  : "")
               }
               name="age"
               placeholder="Masukkan usia Anda"
               onChange={handleOnChange}
-              {...record.age}
+              value={form.get("age").value}
             />
-            {record.age.errors && (
-              <small className="text-danger">{record.age.errors.message}</small>
+            {form.get("age").touched && form.get("age").errors && (
+              <small className="text-danger">
+                {form.get("age").errors.message}
+              </small>
             )}
           </Components.Form.Group>
 
@@ -161,17 +153,20 @@ function App() {
             <textarea
               className={
                 "form-control " +
-                (record.address.getIsValid() ? "is-valid" : "is-invalid")
+                (form.get("address").touched
+                  ? form.get("address").getIsValid()
+                    ? "is-valid"
+                    : "is-invalid"
+                  : "")
               }
               name="address"
               placeholder="Masukkan alamat Anda"
-              value={record.address}
+              value={form.get("address").value}
               onChange={handleOnChange}
-              {...record.address}
             />
-            {record.address.errors && (
+            {form.get("address").touched && form.get("address").errors && (
               <small className="text-danger">
-                {record.address.errors.message}
+                {form.get("address").errors.message}
               </small>
             )}
           </Components.Form.Group>
@@ -180,11 +175,15 @@ function App() {
             <select
               className={
                 "form-select " +
-                (record.maritalStatus.getIsValid() ? "is-valid" : "is-invalid")
+                (form.get("maritalStatus").touched
+                  ? form.get("maritalStatus").getIsValid()
+                    ? "is-valid"
+                    : "is-invalid"
+                  : "")
               }
               name="maritalStatus"
               onChange={handleOnChange}
-              {...record.maritalStatus}
+              value={form.get("maritalStatus").value}
             >
               <option value="">Pilih status perkawinan</option>
               {state.statusPerkawinanList.map((statusPerkawinan) => (
@@ -193,11 +192,12 @@ function App() {
                 </option>
               ))}
             </select>
-            {record.maritalStatus.errors && (
-              <small className="text-danger">
-                {record.maritalStatus.errors.message}
-              </small>
-            )}
+            {form.get("maritalStatus").touched &&
+              form.get("maritalStatus").errors && (
+                <small className="text-danger">
+                  {form.get("maritalStatus").errors.message}
+                </small>
+              )}
           </Components.Form.Group>
 
           <Components.Form.Group label="Jenis Kelamin" required={true}>
@@ -206,13 +206,17 @@ function App() {
                 <input
                   className={
                     "form-check-input " +
-                    (record.gender.getIsValid() ? "is-valid" : "is-invalid")
+                    (form.get("gender").touched
+                      ? form.get("gender").getIsValid()
+                        ? "is-valid"
+                        : "is-invalid"
+                      : "")
                   }
                   type="radio"
                   name="gender"
                   id={"jenisKelamin" + jenisKelamin.id}
                   value={jenisKelamin.id}
-                  checked={jenisKelamin.id === +record.gender.value}
+                  checked={jenisKelamin.id === +form.get("gender").value}
                   onChange={handleOnChange}
                 />
                 <label
@@ -223,9 +227,9 @@ function App() {
                 </label>
               </div>
             ))}
-            {record.gender.errors && (
+            {form.get("gender").touched && form.get("gender").errors && (
               <small className="text-danger">
-                {record.gender.errors.message}
+                {form.get("gender").errors.message}
               </small>
             )}
           </Components.Form.Group>
@@ -236,18 +240,22 @@ function App() {
                 <input
                   className={
                     "form-check-input " +
-                    (record.hobi.getIsValid() ? "is-valid" : "is-invalid")
+                    (form.get("hobi").touched
+                      ? form.get("hobi").getIsValid()
+                        ? "is-valid"
+                        : "is-invalid"
+                      : "")
                   }
                   type="checkbox"
                   id={"hobi" + hobi.id}
                   value={hobi.id}
                   checked={
-                    (record.hobi.value || []).findIndex(
+                    (form.get("hobi").value || []).findIndex(
                       (val: HobiModel) => val.id === hobi.id
                     ) !== -1
                   }
                   onChange={(e) => {
-                    const control: FormControl = record.hobi;
+                    const control: FormControl = form.get("hobi");
                     const value = control.value || [];
                     if (e.target.checked) {
                       value.push(hobi);
@@ -259,11 +267,7 @@ function App() {
                         value.splice(indexOfHobi, 1);
                       }
                     }
-                    control.patchValue(value.length > 0 ? value : "");
-                    setRecord((record) => ({
-                      ...record,
-                      hobi: control,
-                    }));
+                    form.patchValue({ hobi: value.length > 0 ? value : "" });
                   }}
                 />
                 <label className="form-check-label" htmlFor={"hobi" + hobi.id}>
@@ -271,9 +275,9 @@ function App() {
                 </label>
               </div>
             ))}
-            {record.hobi.errors && (
+            {form.get("hobi").touched && form.get("hobi").errors && (
               <small className="text-danger">
-                {record.hobi.errors.message}
+                {form.get("hobi").errors.message}
               </small>
             )}
           </Components.Form.Group>
@@ -283,32 +287,30 @@ function App() {
               <input
                 className={
                   "form-check-input " +
-                  (record.termAndCondition.getIsValid()
-                    ? "is-valid"
-                    : "is-invalid")
+                  (form.get("termAndCondition").touched
+                    ? form.get("termAndCondition").getIsValid()
+                      ? "is-valid"
+                      : "is-invalid"
+                    : "")
                 }
                 type="checkbox"
                 id="termAndCondition"
                 name="termAndCondition"
-                checked={!!record.termAndCondition.value}
-                onChange={(e) => {
-                  const control = record.termAndCondition;
-                  control.patchValue(e.target.checked);
-                  setRecord((record) => ({
-                    ...record,
-                    termAndCondition: control,
-                  }));
-                }}
+                checked={!!form.get("termAndCondition").value}
+                onChange={(e) =>
+                  form.patchValue({ termAndCondition: e.target.checked })
+                }
               />
               <label className="form-check-label" htmlFor="termAndCondition">
                 Term and condition
               </label>
             </div>
-            {record.termAndCondition.errors && (
-              <small className="text-danger">
-                {record.termAndCondition.errors.message}
-              </small>
-            )}
+            {form.get("termAndCondition").touched &&
+              form.get("termAndCondition").errors && (
+                <small className="text-danger">
+                  {form.get("termAndCondition").errors.message}
+                </small>
+              )}
           </Components.Form.Group>
 
           <button className="btn btn-primary">
