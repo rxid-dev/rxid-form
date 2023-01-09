@@ -1,12 +1,12 @@
 import { ValidationError } from "./type/ValidationError";
-import { ValidatorFN } from "./type/ValidationFN";
+import { ValidatorFn } from "./type/ValidationFN";
 export class FormControl {
   public errors: ValidationError;
   public value: any;
   private touched: boolean;
   private dirty: boolean;
   constructor(
-    private props: [any] | [any, ValidatorFN | Array<ValidatorFN> | null]
+    private props: [any] | [any, ValidatorFn | Array<ValidatorFn> | null]
   ) {
     this.value = props[0];
     this.errors = this.createErrors(props[0]);

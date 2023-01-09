@@ -1,8 +1,8 @@
 import { ValidationError } from "../../core/form/type/ValidationError";
-import { ValidatorFN } from "../../core/form/type/ValidationFN";
+import { ValidatorFn } from "../../core/form/type/ValidationFN";
 export const requiredValidator = (
   message: string = "Data wajib diisi"
-): ValidatorFN => {
+): ValidatorFn => {
   return (value): ValidationError => {
     if (
       typeof value === undefined ||

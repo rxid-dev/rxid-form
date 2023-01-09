@@ -18,15 +18,40 @@ function App() {
   });
 
   const form = useForm({
+    code: [
+      "",
+      [
+        Validators.required("Code wajib diisi"),
+        Validators.regex("^[A-Z]*$", "Format code tidak valid"),
+      ],
+    ],
     name: [
       "",
       [
         Validators.required("Nama wajib diisi"),
         Validators.minLength(4, "Nama tidak boleh kurang dari 4 karakter"),
+        Validators.maxLength(10, "Nama tidak boleh lebih dari 7 karakter"),
       ],
     ],
+    nik: [
+      "",
+      [
+        Validators.required("NIK wajib diisi"),
+        Validators.number("NIK harus terdiri dari angka"),
+        Validators.actualLength(16, "NIK harus tediri dari 16 angka"),
+      ],
+    ],
+    email: ["", [Validators.required("NIK wajib diisi"), Validators.email()]],
     dob: ["", Validators.required("Tanggal lahir wajib dipilih")],
-    age: ["", Validators.required("Usia wajib diisi")],
+    age: [
+      "",
+      [
+        Validators.required("Usia wajib diisi"),
+        Validators.number("Usia harus terdiri dari angka"),
+        Validators.min(17, "Anda harus berusia diatas 16 tahun"),
+        Validators.max(30, "Anda harus berusia kurang dari 31 tahun"),
+      ],
+    ],
     address: ["", Validators.required("Alamat wajib diisi")],
     maritalStatus: ["", Validators.required("Statis perkawinan wajib dipilih")],
     gender: ["", Validators.required("Jenis kelamin wajib dipilih")],
@@ -40,7 +65,10 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       const record = {
+        code: "XYZ",
         name: "John Doe",
+        nik: "1234567890123456",
+        email: "johndoe@gmaol.com",
         dob: "1990-03-31",
         age: "24",
         address: "Jln. Cendrawasi No.88",
@@ -50,7 +78,7 @@ function App() {
         hobi: HobiModel.createList().slice(0, 2),
       };
       form.patchValue(record);
-    }, 5000);
+    }, 2000);
   }, []);
 
   const handleOnChange = (e: any) => {
@@ -62,7 +90,6 @@ function App() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     form.validate();
-    console.log(form.getValue());
     if (form.getIsValid()) {
       console.log(form.getValue());
     }
@@ -79,6 +106,29 @@ function App() {
         })}
       <Components.Card header="User Form">
         <form onSubmit={handleSubmit}>
+          <Components.Form.Group label="Code" required={true}>
+            <input
+              type="text"
+              className={
+                "form-control " +
+                (form.get("code").touched
+                  ? form.get("code").getIsValid()
+                    ? "is-valid"
+                    : "is-invalid"
+                  : "")
+              }
+              name="code"
+              placeholder="Masukkan code Anda"
+              onChange={handleOnChange}
+              value={form.get("code").value}
+            />
+            {form.get("code").touched && form.get("code").errors && (
+              <small className="text-danger">
+                {form.get("code").errors.message}
+              </small>
+            )}
+          </Components.Form.Group>
+
           <Components.Form.Group label="Nama" required={true}>
             <input
               type="text"
@@ -98,6 +148,52 @@ function App() {
             {form.get("name").touched && form.get("name").errors && (
               <small className="text-danger">
                 {form.get("name").errors.message}
+              </small>
+            )}
+          </Components.Form.Group>
+
+          <Components.Form.Group label="NIK" required={true}>
+            <input
+              type="text"
+              className={
+                "form-control " +
+                (form.get("nik").touched
+                  ? form.get("nik").getIsValid()
+                    ? "is-valid"
+                    : "is-invalid"
+                  : "")
+              }
+              name="nik"
+              placeholder="Masukkan NIK Anda"
+              onChange={handleOnChange}
+              value={form.get("nik").value}
+            />
+            {form.get("nik").touched && form.get("nik").errors && (
+              <small className="text-danger">
+                {form.get("nik").errors.message}
+              </small>
+            )}
+          </Components.Form.Group>
+
+          <Components.Form.Group label="Email" required={true}>
+            <input
+              type="text"
+              className={
+                "form-control " +
+                (form.get("email").touched
+                  ? form.get("email").getIsValid()
+                    ? "is-valid"
+                    : "is-invalid"
+                  : "")
+              }
+              name="email"
+              placeholder="Masukkan email Anda"
+              onChange={handleOnChange}
+              value={form.get("email").value}
+            />
+            {form.get("email").touched && form.get("email").errors && (
+              <small className="text-danger">
+                {form.get("email").errors.message}
               </small>
             )}
           </Components.Form.Group>
