@@ -53,9 +53,39 @@ function App() {
       ],
     ],
     address: ["", Validators.required("Alamat wajib diisi")],
-    maritalStatus: ["", Validators.required("Statis perkawinan wajib dipilih")],
-    gender: ["", Validators.required("Jenis kelamin wajib dipilih")],
-    hobi: ["", Validators.required("Hobi wajib dipilih")],
+    maritalStatus: [
+      "",
+      Validators.required("Statis perkawinan wajib dipilih"),
+      {
+        toDTO: (value: StatusPerkawinanModel) => {
+          return {
+            marital_status_id: value.id,
+          };
+        },
+      },
+    ],
+    gender: [
+      "",
+      Validators.required("Jenis kelamin wajib dipilih"),
+      {
+        toDTO: (value: JenisKelaminModel) => {
+          return {
+            gender_id: value.id,
+          };
+        },
+      },
+    ],
+    hobi: [
+      "",
+      Validators.required("Hobi wajib dipilih"),
+      {
+        toDTO: (values: Array<HobiModel>) => {
+          return {
+            hobbie_ids: values.map((val) => val.id),
+          };
+        },
+      },
+    ],
     termAndCondition: [
       false,
       Validators.required("Syarat dan ketentuan wajib disetujui"),
@@ -112,15 +142,13 @@ function App() {
               className={
                 "form-control " +
                 (form.get("code").touched
-                  ? form.get("code").getIsValid()
+                  ? form.get("code").isValid
                     ? "is-valid"
                     : "is-invalid"
                   : "")
               }
-              name="code"
               placeholder="Masukkan code Anda"
-              onChange={handleOnChange}
-              value={form.get("code").value}
+              {...form.get("code").nativeProps}
             />
             {form.get("code").touched && form.get("code").errors && (
               <small className="text-danger">
@@ -135,15 +163,13 @@ function App() {
               className={
                 "form-control " +
                 (form.get("name").touched
-                  ? form.get("name").getIsValid()
+                  ? form.get("name").isValid
                     ? "is-valid"
                     : "is-invalid"
                   : "")
               }
-              name="name"
               placeholder="Masukkan nama Anda"
-              onChange={handleOnChange}
-              value={form.get("name").value}
+              {...form.get("name").nativeProps}
             />
             {form.get("name").touched && form.get("name").errors && (
               <small className="text-danger">
@@ -158,15 +184,13 @@ function App() {
               className={
                 "form-control " +
                 (form.get("nik").touched
-                  ? form.get("nik").getIsValid()
+                  ? form.get("nik").isValid
                     ? "is-valid"
                     : "is-invalid"
                   : "")
               }
-              name="nik"
               placeholder="Masukkan NIK Anda"
-              onChange={handleOnChange}
-              value={form.get("nik").value}
+              {...form.get("nik").nativeProps}
             />
             {form.get("nik").touched && form.get("nik").errors && (
               <small className="text-danger">
@@ -181,15 +205,13 @@ function App() {
               className={
                 "form-control " +
                 (form.get("email").touched
-                  ? form.get("email").getIsValid()
+                  ? form.get("email").isValid
                     ? "is-valid"
                     : "is-invalid"
                   : "")
               }
-              name="email"
               placeholder="Masukkan email Anda"
-              onChange={handleOnChange}
-              value={form.get("email").value}
+              {...form.get("email").nativeProps}
             />
             {form.get("email").touched && form.get("email").errors && (
               <small className="text-danger">
@@ -204,15 +226,13 @@ function App() {
               className={
                 "form-control " +
                 (form.get("dob").touched
-                  ? form.get("dob").getIsValid()
+                  ? form.get("dob").isValid
                     ? "is-valid"
                     : "is-invalid"
                   : "")
               }
-              name="dob"
               placeholder="Pilih tanggal lahir Anda"
-              onChange={handleOnChange}
-              value={form.get("dob").value}
+              {...form.get("dob").nativeProps}
             />
             {form.get("dob").touched && form.get("dob").errors && (
               <small className="text-danger">
@@ -227,15 +247,13 @@ function App() {
               className={
                 "form-control " +
                 (form.get("age").touched
-                  ? form.get("age").getIsValid()
+                  ? form.get("age").isValid
                     ? "is-valid"
                     : "is-invalid"
                   : "")
               }
-              name="age"
               placeholder="Masukkan usia Anda"
-              onChange={handleOnChange}
-              value={form.get("age").value}
+              {...form.get("age").nativeProps}
             />
             {form.get("age").touched && form.get("age").errors && (
               <small className="text-danger">
@@ -249,15 +267,13 @@ function App() {
               className={
                 "form-control " +
                 (form.get("address").touched
-                  ? form.get("address").getIsValid()
+                  ? form.get("address").isValid
                     ? "is-valid"
                     : "is-invalid"
                   : "")
               }
-              name="address"
               placeholder="Masukkan alamat Anda"
-              value={form.get("address").value}
-              onChange={handleOnChange}
+              {...form.get("address").nativeProps}
             />
             {form.get("address").touched && form.get("address").errors && (
               <small className="text-danger">
@@ -271,12 +287,12 @@ function App() {
               className={
                 "form-select " +
                 (form.get("maritalStatus").touched
-                  ? form.get("maritalStatus").getIsValid()
+                  ? form.get("maritalStatus").isValid
                     ? "is-valid"
                     : "is-invalid"
                   : "")
               }
-              name="maritalStatus"
+              {...form.get("maritalStatus").nativeProps}
               onChange={(e) => {
                 let value: any = e.target.value;
                 if (value) {
@@ -312,14 +328,14 @@ function App() {
                   className={
                     "form-check-input " +
                     (form.get("gender").touched
-                      ? form.get("gender").getIsValid()
+                      ? form.get("gender").isValid
                         ? "is-valid"
                         : "is-invalid"
                       : "")
                   }
                   type="radio"
-                  name="gender"
                   id={"jenisKelamin" + jenisKelamin.id}
+                  {...form.get("gender").nativeProps}
                   value={jenisKelamin.id}
                   checked={jenisKelamin.id === +form.get("gender").value?.id}
                   onChange={(e) => {
@@ -348,13 +364,14 @@ function App() {
                   className={
                     "form-check-input " +
                     (form.get("hobi").touched
-                      ? form.get("hobi").getIsValid()
+                      ? form.get("hobi").isValid
                         ? "is-valid"
                         : "is-invalid"
                       : "")
                   }
                   type="checkbox"
                   id={"hobi" + hobi.id}
+                  {...form.get("code").nativeProps}
                   value={hobi.id}
                   checked={
                     (form.get("hobi").value || []).findIndex(
@@ -395,14 +412,14 @@ function App() {
                 className={
                   "form-check-input " +
                   (form.get("termAndCondition").touched
-                    ? form.get("termAndCondition").getIsValid()
+                    ? form.get("termAndCondition").isValid
                       ? "is-valid"
                       : "is-invalid"
                     : "")
                 }
                 type="checkbox"
                 id="termAndCondition"
-                name="termAndCondition"
+                {...form.get("code").nativeProps}
                 checked={!!form.get("termAndCondition").value}
                 onChange={(e) =>
                   form.patchValue({ termAndCondition: e.target.checked })

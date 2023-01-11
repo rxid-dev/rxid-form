@@ -1,15 +1,25 @@
 import { useState } from "react";
-import { FormControl } from "./FormControl";
+import { FormControl, FormControlProps } from "./FormControl";
 
 interface Props {
-  [key: string]: any;
+  [key: string]: FormControlProps;
 }
 
 export const useForm = (props: Props) => {
+  const reloadState = (): void => {
+    setState((state: any) => ({
+      ...state,
+    }));
+  };
+
+  const get = (controlName: string): FormControl => {
+    return state.controls[controlName];
+  };
+
   const createControls = (props: Props) => {
-    const controls: Props = {};
+    const controls: { [key: string]: FormControl } = {};
     Object.keys(props).map((key: string) => {
-      controls[key] = new FormControl(props[key]);
+      controls[key] = new FormControl(props[key], key, { reloadState, get });
     });
     return controls;
   };
@@ -17,10 +27,6 @@ export const useForm = (props: Props) => {
   const [state, setState] = useState<any>({
     controls: createControls(props),
   });
-
-  const get = (controlName: string): FormControl => {
-    return state.controls[controlName];
-  };
 
   const patchValue = (value: { [key: string]: any }) => {
     Object.keys(value).forEach((key) => {
@@ -37,7 +43,15 @@ export const useForm = (props: Props) => {
   const getValue = (): { [key: string]: any } => {
     const value: { [key: string]: any } = {};
     Object.keys(state.controls).forEach((key: string) => {
-      value[key] = get(key).value;
+      const control: FormControl = get(key);
+      if (control.props[2]?.toDTO && control.value) {
+        let dto = control.props[2]?.toDTO(control.value);
+        Object.keys(dto).forEach((dtoKey) => {
+          value[dtoKey] = dto[dtoKey];
+        });
+      } else {
+        value[key] = control.value;
+      }
     });
     return value;
   };
