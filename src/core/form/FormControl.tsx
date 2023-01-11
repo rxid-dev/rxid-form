@@ -27,7 +27,22 @@ export class FormControl {
     this.dirty = false;
   }
 
+  // set value from module
   public patchValue(value: any): void {
+    if (this.props[2]?.toModel) {
+      this.value = this.props[2]?.toModel(value);
+      this.errors = this.createErrors(this.value);
+    } else {
+      this.value = value;
+      this.errors = this.createErrors(value);
+    }
+
+    this.isValid = !this.errors;
+    this.parent.reloadState();
+  }
+
+  // set value from component or input
+  public setValue(value: any): void {
     this.value = value;
     this.errors = this.createErrors(value);
     this.isValid = !this.errors;
@@ -52,7 +67,7 @@ export class FormControl {
       value: this.value,
       onChange: (event: any) => {
         this.markAsDirty();
-        this.patchValue(event.target.value);
+        this.setValue(event.target.value);
       },
       onBlur: () => {
         this.markAsTouched();

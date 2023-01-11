@@ -41,7 +41,10 @@ function App() {
         Validators.actualLength(16, "NIK harus tediri dari 16 angka"),
       ],
     ],
-    email: ["", [Validators.required("NIK wajib diisi"), Validators.email()]],
+    email: [
+      "",
+      [Validators.required("Alamat email wajib diisi"), Validators.email()],
+    ],
     dob: ["", Validators.required("Tanggal lahir wajib dipilih")],
     age: [
       "",
@@ -68,6 +71,12 @@ function App() {
       "",
       Validators.required("Jenis kelamin wajib dipilih"),
       {
+        toModel: (value) => {
+          return {
+            id: value.gender_id,
+            name: value.gender_name,
+          };
+        },
         toDTO: (value: JenisKelaminModel) => {
           return {
             gender_id: value.id,
@@ -94,6 +103,7 @@ function App() {
 
   useEffect(() => {
     setTimeout(() => {
+      const gender = JenisKelaminModel.createList()[0];
       const record = {
         code: "XYZ",
         name: "John Doe",
@@ -103,19 +113,16 @@ function App() {
         age: "24",
         address: "Jln. Cendrawasi No.88",
         maritalStatus: StatusPerkawinanModel.createList()[0],
-        gender: JenisKelaminModel.createList()[0],
+        gender: {
+          gender_id: gender.id,
+          gender_name: gender.name,
+        },
         termAndCondition: true,
         hobi: HobiModel.createList().slice(0, 2),
       };
       form.patchValue(record);
     }, 2000);
   }, []);
-
-  const handleOnChange = (e: any) => {
-    form.patchValue({
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -302,7 +309,7 @@ function App() {
                   );
                   value = state.statusPerkawinanList[indexOfOption];
                 }
-                form.patchValue({ maritalStatus: value });
+                form.get("maritalStatus").setValue("value");
               }}
               value={form.get("maritalStatus").value?.id}
             >
@@ -338,8 +345,8 @@ function App() {
                   {...form.get("gender").nativeProps}
                   value={jenisKelamin.id}
                   checked={jenisKelamin.id === +form.get("gender").value?.id}
-                  onChange={(e) => {
-                    form.patchValue({ gender: jenisKelamin });
+                  onChange={() => {
+                    form.get("gender").setValue(jenisKelamin);
                   }}
                 />
                 <label
@@ -358,7 +365,7 @@ function App() {
           </Components.Form.Group>
 
           <Components.Form.Group label="Hobi" required={true}>
-            {state.hobiList.map((hobi, i) => (
+            {state.hobiList.map((hobi) => (
               <div className="form-check" key={hobi.id}>
                 <input
                   className={
@@ -391,7 +398,8 @@ function App() {
                         value.splice(indexOfHobi, 1);
                       }
                     }
-                    form.patchValue({ hobi: value.length > 0 ? value : "" });
+                    control.setValue(value.length > 0 ? value : "");
+                    control.markAsTouched();
                   }}
                 />
                 <label className="form-check-label" htmlFor={"hobi" + hobi.id}>
@@ -421,9 +429,11 @@ function App() {
                 id="termAndCondition"
                 {...form.get("code").nativeProps}
                 checked={!!form.get("termAndCondition").value}
-                onChange={(e) =>
-                  form.patchValue({ termAndCondition: e.target.checked })
-                }
+                onChange={(e) => {
+                  const control: FormControl = form.get("termAndCondition");
+                  control.setValue(e.target.checked);
+                  control.markAsTouched();
+                }}
               />
               <label className="form-check-label" htmlFor="termAndCondition">
                 Term and condition

@@ -18,7 +18,7 @@ export const useForm = (props: Props) => {
 
   const createControls = (props: Props) => {
     const controls: { [key: string]: FormControl } = {};
-    Object.keys(props).map((key: string) => {
+    Object.keys(props).forEach((key: string) => {
       controls[key] = new FormControl(props[key], key, { reloadState, get });
     });
     return controls;

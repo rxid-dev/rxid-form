@@ -7,6 +7,6 @@ export const emailValidator = (
   // answer by: MonkeyZeus
   // last access: January, 10 2023; 01:43
   // url: https://stackoverflow.com/a/60282793
-  const pattern = `^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$`;
+  const pattern = `^[a-zA-Z0-9]+(?:.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:.[a-zA-Z0-9]+)*$`;
   return regexValidator(pattern, message);
 };

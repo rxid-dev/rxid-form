@@ -5,7 +5,7 @@ export const requiredValidator = (
 ): ValidatorFn => {
   return (value): ValidationError => {
     if (
-      typeof value === undefined ||
+      typeof value === "undefined" ||
       value === null ||
       value === "" ||
       value === false
