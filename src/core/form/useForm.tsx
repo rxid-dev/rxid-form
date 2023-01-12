@@ -81,6 +81,29 @@ export const useForm = (props: Props) => {
     );
   };
 
+  const addControl = (controlName: string, props: FormControlProps) => {
+    const controls = state.controls;
+    if (controls[controlName]) return;
+    controls[controlName] = new FormControl(props, controlName, {
+      reloadState,
+      get,
+    });
+    setState((state: any) => ({
+      ...state,
+      controls,
+    }));
+  };
+
+  const removeControl = (controlName: string): void => {
+    const controls = state.controls;
+    if (!controls[controlName]) return;
+    delete controls[controlName];
+    setState((state: any) => ({
+      ...state,
+      controls,
+    }));
+  };
+
   return {
     ...state,
     get,
@@ -89,5 +112,7 @@ export const useForm = (props: Props) => {
     patchValue,
     validate,
     getIsValid,
+    addControl,
+    removeControl,
   };
 };

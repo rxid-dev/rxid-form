@@ -112,7 +112,9 @@ function App() {
         dob: "1990-03-31",
         age: "24",
         address: "Jln. Cendrawasi No.88",
-        maritalStatus: StatusPerkawinanModel.createList()[0],
+        maritalStatus: StatusPerkawinanModel.createList()[3],
+        no_akta_menikah: "00-77-88",
+        no_akta_meninggal: "00-77-88",
         gender: {
           gender_id: gender.id,
           gender_name: gender.name,
@@ -120,6 +122,7 @@ function App() {
         termAndCondition: true,
         hobi: HobiModel.createList().slice(0, 2),
       };
+      onChangeMaritalStatus(record.maritalStatus);
       form.patchValue(record);
     }, 2000);
   }, []);
@@ -129,6 +132,25 @@ function App() {
     form.validate();
     if (form.getIsValid()) {
       console.log(form.getValue());
+    }
+  };
+
+  const onChangeMaritalStatus = (value: StatusPerkawinanModel) => {
+    if (value.id === 1) {
+      form.removeControl("no_akta_meninggal");
+      form.addControl("no_akta_menikah", [
+        "",
+        Validators.required("Nomor akta menikah wajib diisi"),
+      ]);
+    } else if (value.id === 4) {
+      form.removeControl("no_akta_menikah");
+      form.addControl("no_akta_meninggal", [
+        "",
+        Validators.required("Nomor akta meninggal wajib diisi"),
+      ]);
+    } else {
+      form.removeControl("no_akta_menikah");
+      form.removeControl("no_akta_meninggal");
     }
   };
 
@@ -309,7 +331,8 @@ function App() {
                   );
                   value = state.statusPerkawinanList[indexOfOption];
                 }
-                form.get("maritalStatus").setValue("value");
+                form.get("maritalStatus").setValue(value);
+                onChangeMaritalStatus(value);
               }}
               value={form.get("maritalStatus").value?.id}
             >
@@ -327,6 +350,54 @@ function App() {
                 </small>
               )}
           </Components.Form.Group>
+
+          {form.get("no_akta_menikah") && (
+            <Components.Form.Group label="Nomor Akta Menikah" required={true}>
+              <input
+                type="text"
+                className={
+                  "form-control " +
+                  (form.get("no_akta_menikah").touched
+                    ? form.get("no_akta_menikah").isValid
+                      ? "is-valid"
+                      : "is-invalid"
+                    : "")
+                }
+                placeholder="Masukkan nomor akta menikah"
+                {...form.get("no_akta_menikah").nativeProps}
+              />
+              {form.get("no_akta_menikah").touched &&
+                form.get("no_akta_menikah").errors && (
+                  <small className="text-danger">
+                    {form.get("no_akta_menikah").errors.message}
+                  </small>
+                )}
+            </Components.Form.Group>
+          )}
+
+          {form.get("no_akta_meninggal") && (
+            <Components.Form.Group label="Nomor Akta Meninggal" required={true}>
+              <input
+                type="text"
+                className={
+                  "form-control " +
+                  (form.get("no_akta_meninggal").touched
+                    ? form.get("no_akta_meninggal").isValid
+                      ? "is-valid"
+                      : "is-invalid"
+                    : "")
+                }
+                placeholder="Masukkan nomor akta meninggal"
+                {...form.get("no_akta_meninggal").nativeProps}
+              />
+              {form.get("no_akta_meninggal").touched &&
+                form.get("no_akta_meninggal").errors && (
+                  <small className="text-danger">
+                    {form.get("no_akta_meninggal").errors.message}
+                  </small>
+                )}
+            </Components.Form.Group>
+          )}
 
           <Components.Form.Group label="Jenis Kelamin" required={true}>
             {state.jenisKelaminList.map((jenisKelamin) => (
