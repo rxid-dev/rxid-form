@@ -130,8 +130,9 @@ function App() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     form.validate();
-    if (form.getIsValid()) {
-      console.log(form.getValue());
+    console.log(form.isValid);
+    if (form.isValid) {
+      console.log(form.value);
     }
   };
 
@@ -179,10 +180,12 @@ function App() {
               placeholder="Masukkan code Anda"
               {...form.get("code").nativeProps}
             />
-            {form.get("code").touched && form.get("code").errors && (
+            {form.get("code").touched && form.get("code").errors ? (
               <small className="text-danger">
-                {form.get("code").errors.message}
+                {form.get("code").errors?.message}
               </small>
+            ) : (
+              <></>
             )}
           </Components.Form.Group>
 
@@ -200,10 +203,12 @@ function App() {
               placeholder="Masukkan nama Anda"
               {...form.get("name").nativeProps}
             />
-            {form.get("name").touched && form.get("name").errors && (
+            {form.get("name").touched && form.get("name").errors ? (
               <small className="text-danger">
-                {form.get("name").errors.message}
+                {form.get("name").errors?.message}
               </small>
+            ) : (
+              <></>
             )}
           </Components.Form.Group>
 
@@ -221,10 +226,12 @@ function App() {
               placeholder="Masukkan NIK Anda"
               {...form.get("nik").nativeProps}
             />
-            {form.get("nik").touched && form.get("nik").errors && (
+            {form.get("nik").touched && form.get("nik").errors ? (
               <small className="text-danger">
-                {form.get("nik").errors.message}
+                {form.get("nik").errors?.message}
               </small>
+            ) : (
+              <></>
             )}
           </Components.Form.Group>
 
@@ -242,10 +249,12 @@ function App() {
               placeholder="Masukkan email Anda"
               {...form.get("email").nativeProps}
             />
-            {form.get("email").touched && form.get("email").errors && (
+            {form.get("email").touched && form.get("email").errors ? (
               <small className="text-danger">
-                {form.get("email").errors.message}
+                {form.get("email").errors?.message}
               </small>
+            ) : (
+              <></>
             )}
           </Components.Form.Group>
 
@@ -263,10 +272,12 @@ function App() {
               placeholder="Pilih tanggal lahir Anda"
               {...form.get("dob").nativeProps}
             />
-            {form.get("dob").touched && form.get("dob").errors && (
+            {form.get("dob").touched && form.get("dob").errors ? (
               <small className="text-danger">
-                {form.get("dob").errors.message}
+                {form.get("dob").errors?.message}
               </small>
+            ) : (
+              <></>
             )}
           </Components.Form.Group>
 
@@ -284,10 +295,12 @@ function App() {
               placeholder="Masukkan usia Anda"
               {...form.get("age").nativeProps}
             />
-            {form.get("age").touched && form.get("age").errors && (
+            {form.get("age").touched && form.get("age").errors ? (
               <small className="text-danger">
-                {form.get("age").errors.message}
+                {form.get("age").errors?.message}
               </small>
+            ) : (
+              <></>
             )}
           </Components.Form.Group>
 
@@ -304,10 +317,12 @@ function App() {
               placeholder="Masukkan alamat Anda"
               {...form.get("address").nativeProps}
             />
-            {form.get("address").touched && form.get("address").errors && (
+            {form.get("address").touched && form.get("address").errors ? (
               <small className="text-danger">
-                {form.get("address").errors.message}
+                {form.get("address").errors?.message}
               </small>
+            ) : (
+              <></>
             )}
           </Components.Form.Group>
 
@@ -344,11 +359,13 @@ function App() {
               ))}
             </select>
             {form.get("maritalStatus").touched &&
-              form.get("maritalStatus").errors && (
-                <small className="text-danger">
-                  {form.get("maritalStatus").errors.message}
-                </small>
-              )}
+            form.get("maritalStatus").errors ? (
+              <small className="text-danger">
+                {form.get("maritalStatus").errors?.message}
+              </small>
+            ) : (
+              <></>
+            )}
           </Components.Form.Group>
 
           {form.get("no_akta_menikah") && (
@@ -367,11 +384,13 @@ function App() {
                 {...form.get("no_akta_menikah").nativeProps}
               />
               {form.get("no_akta_menikah").touched &&
-                form.get("no_akta_menikah").errors && (
-                  <small className="text-danger">
-                    {form.get("no_akta_menikah").errors.message}
-                  </small>
-                )}
+              form.get("no_akta_menikah").errors ? (
+                <small className="text-danger">
+                  {form.get("no_akta_menikah").errors?.message}
+                </small>
+              ) : (
+                <></>
+              )}
             </Components.Form.Group>
           )}
 
@@ -391,98 +410,111 @@ function App() {
                 {...form.get("no_akta_meninggal").nativeProps}
               />
               {form.get("no_akta_meninggal").touched &&
-                form.get("no_akta_meninggal").errors && (
-                  <small className="text-danger">
-                    {form.get("no_akta_meninggal").errors.message}
-                  </small>
-                )}
+              form.get("no_akta_meninggal").errors ? (
+                <small className="text-danger">
+                  {form.get("no_akta_meninggal").errors?.message}
+                </small>
+              ) : (
+                <></>
+              )}
             </Components.Form.Group>
           )}
 
           <Components.Form.Group label="Jenis Kelamin" required={true}>
-            {state.jenisKelaminList.map((jenisKelamin) => (
-              <div className="form-check" key={jenisKelamin.id}>
-                <input
-                  className={
-                    "form-check-input " +
-                    (form.get("gender").touched
-                      ? form.get("gender").isValid
-                        ? "is-valid"
-                        : "is-invalid"
-                      : "")
-                  }
-                  type="radio"
-                  id={"jenisKelamin" + jenisKelamin.id}
-                  {...form.get("gender").nativeProps}
-                  value={jenisKelamin.id}
-                  checked={jenisKelamin.id === +form.get("gender").value?.id}
-                  onChange={() => {
-                    form.get("gender").setValue(jenisKelamin);
-                  }}
-                />
-                <label
-                  className="form-check-label"
-                  htmlFor={"jenisKelamin" + jenisKelamin.id}
-                >
-                  {jenisKelamin.name}
-                </label>
-              </div>
-            ))}
-            {form.get("gender").touched && form.get("gender").errors && (
-              <small className="text-danger">
-                {form.get("gender").errors.message}
-              </small>
-            )}
+            <>
+              {state.jenisKelaminList.map((jenisKelamin) => (
+                <div className="form-check" key={jenisKelamin.id}>
+                  <input
+                    className={
+                      "form-check-input " +
+                      (form.get("gender").touched
+                        ? form.get("gender").isValid
+                          ? "is-valid"
+                          : "is-invalid"
+                        : "")
+                    }
+                    type="radio"
+                    id={"jenisKelamin" + jenisKelamin.id}
+                    {...form.get("gender").nativeProps}
+                    value={jenisKelamin.id}
+                    checked={jenisKelamin.id === +form.get("gender").value?.id}
+                    onChange={() => {
+                      form.get("gender").setValue(jenisKelamin);
+                    }}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor={"jenisKelamin" + jenisKelamin.id}
+                  >
+                    {jenisKelamin.name}
+                  </label>
+                </div>
+              ))}
+              {form.get("gender").touched && form.get("gender").errors ? (
+                <small className="text-danger">
+                  {form.get("gender").errors?.message}
+                </small>
+              ) : (
+                <></>
+              )}
+            </>
           </Components.Form.Group>
 
           <Components.Form.Group label="Hobi" required={true}>
-            {state.hobiList.map((hobi) => (
-              <div className="form-check" key={hobi.id}>
-                <input
-                  className={
-                    "form-check-input " +
-                    (form.get("hobi").touched
-                      ? form.get("hobi").isValid
-                        ? "is-valid"
-                        : "is-invalid"
-                      : "")
-                  }
-                  type="checkbox"
-                  id={"hobi" + hobi.id}
-                  {...form.get("code").nativeProps}
-                  value={hobi.id}
-                  checked={
-                    (form.get("hobi").value || []).findIndex(
-                      (val: HobiModel) => val.id === hobi.id
-                    ) !== -1
-                  }
-                  onChange={(e) => {
-                    const control: FormControl = form.get("hobi");
-                    const value = control.value || [];
-                    if (e.target.checked) {
-                      value.push(hobi);
-                    } else {
-                      const indexOfHobi = value.findIndex(
-                        (val: HobiModel) => val.id === hobi.id
-                      );
-                      if (indexOfHobi !== -1) {
-                        value.splice(indexOfHobi, 1);
-                      }
+            <>
+              {state.hobiList.map((hobi) => (
+                <div className="form-check" key={hobi.id}>
+                  <input
+                    className={
+                      "form-check-input " +
+                      (form.get("hobi").touched
+                        ? form.get("hobi").isValid
+                          ? "is-valid"
+                          : "is-invalid"
+                        : "")
                     }
-                    control.setValue(value.length > 0 ? value : "");
-                    control.markAsTouched();
-                  }}
-                />
-                <label className="form-check-label" htmlFor={"hobi" + hobi.id}>
-                  {hobi.name}
-                </label>
-              </div>
-            ))}
-            {form.get("hobi").touched && form.get("hobi").errors && (
-              <small className="text-danger">
-                {form.get("hobi").errors.message}
-              </small>
-            )}
+                    type="checkbox"
+                    id={"hobi" + hobi.id}
+                    {...form.get("code").nativeProps}
+                    value={hobi.id}
+                    checked={
+                      (form.get("hobi").value || []).findIndex(
+                        (val: HobiModel) => val.id === hobi.id
+                      ) !== -1
+                    }
+                    onChange={(e) => {
+                      const control: FormControl = form.get("hobi");
+                      const value = control.value || [];
+                      if (e.target.checked) {
+                        value.push(hobi);
+                      } else {
+                        const indexOfHobi = value.findIndex(
+                          (val: HobiModel) => val.id === hobi.id
+                        );
+                        if (indexOfHobi !== -1) {
+                          value.splice(indexOfHobi, 1);
+                        }
+                      }
+                      control.setValue(value.length > 0 ? value : "");
+                      control.markAsTouched();
+                    }}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor={"hobi" + hobi.id}
+                  >
+                    {hobi.name}
+                  </label>
+                </div>
+              ))}
+              {form.get("hobi").touched && form.get("hobi").errors ? (
+                <small className="text-danger">
+                  {form.get("hobi").errors?.message}
+                </small>
+              ) : (
+                <></>
+              )}
+            </>
           </Components.Form.Group>
 
           <Components.Form.Group>
@@ -511,11 +543,13 @@ function App() {
               </label>
             </div>
             {form.get("termAndCondition").touched &&
-              form.get("termAndCondition").errors && (
-                <small className="text-danger">
-                  {form.get("termAndCondition").errors.message}
-                </small>
-              )}
+            form.get("termAndCondition").errors ? (
+              <small className="text-danger">
+                {form.get("termAndCondition").errors?.message}
+              </small>
+            ) : (
+              <></>
+            )}
           </Components.Form.Group>
 
           <button className="btn btn-primary">

@@ -1,25 +1,38 @@
-import { FormControlOptions } from "./interface/FormControlOptions";
+import { AbstractControlProps } from "./interface/AbstractControlProps";
+import { FormControlNativeProps } from "./interface/FormControlNativeProps";
+import { FormControlOptionsProps } from "./interface/FormControlOptions";
+import { FormParentProps } from "./interface/FormParentProps";
 import { ValidationError } from "./type/ValidationError";
 import { ValidatorFn } from "./type/ValidationFN";
 
-export type FormControlProps =
+export type FormControlValueProps =
   | [any]
   | [any, ValidatorFn | Array<ValidatorFn> | null]
-  | [any, ValidatorFn | Array<ValidatorFn> | null, FormControlOptions | null];
+  | [
+      any,
+      ValidatorFn | Array<ValidatorFn> | null,
+      FormControlOptionsProps | null
+    ];
 
-export class FormControl {
+interface FormControlProps extends AbstractControlProps {
+  touched: boolean;
+  dirty: boolean;
+  markAsDirty: () => void;
+  markAsTouched: () => void;
+  nativeProps: FormControlNativeProps;
+}
+
+export class FormControl implements FormControlProps {
+  public controls: { [key: string]: FormControl };
   public errors: ValidationError;
   public value: any;
   public touched: boolean;
   public dirty: boolean;
   public isValid: boolean;
   constructor(
-    public props: FormControlProps,
+    public props: FormControlValueProps,
     public name: string,
-    public parent: {
-      get: (formControlName: string) => FormControl;
-      reloadState: () => void;
-    }
+    public parent: FormParentProps
   ) {
     this.value = props[0];
     this.errors = this.createErrors(props[0]);
@@ -57,12 +70,7 @@ export class FormControl {
     this.dirty = true;
   }
 
-  public get nativeProps(): {
-    value: any;
-    onChange: (e: any) => void;
-    onBlur: () => void;
-    name: string;
-  } {
+  public get nativeProps(): FormControlNativeProps {
     return {
       value: this.value,
       onChange: (event: any) => {
@@ -87,5 +95,9 @@ export class FormControl {
         .map((validator) => validator(value))
         .filter((error) => error)[0] || null
     );
+  }
+
+  public setParent(parent: FormParentProps): void {
+    this.parent = parent;
   }
 }

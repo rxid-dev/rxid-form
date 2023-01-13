@@ -1,118 +1,23 @@
 import { useState } from "react";
-import { FormControl, FormControlProps } from "./FormControl";
+import { formBuilder } from "./formBuilder";
+import { FormControlValueProps } from "./FormControl";
+import { FormGroupProps } from "./FormGroup";
 
-interface Props {
-  [key: string]: FormControlProps;
+interface FormControlProps {
+  [key: string]: FormControlValueProps;
 }
 
-export const useForm = (props: Props) => {
+export const useForm = (props: FormControlProps): FormGroupProps => {
   const reloadState = (): void => {
     setState((state: any) => ({
       ...state,
+      group: state.group,
     }));
   };
 
-  const get = (controlName: string): FormControl => {
-    return state.controls[controlName];
-  };
-
-  const createControls = (props: Props) => {
-    const controls: { [key: string]: FormControl } = {};
-    Object.keys(props).forEach((key: string) => {
-      controls[key] = new FormControl(props[key], key, { reloadState, get });
-    });
-    return controls;
-  };
-
-  const [state, setState] = useState<any>({
-    controls: createControls(props),
+  const [state, setState] = useState<{ group: FormGroupProps }>({
+    group: formBuilder.group(props, { reloadState }),
   });
 
-  const patchValue = (value: { [key: string]: any }) => {
-    Object.keys(value).forEach((key) => {
-      const control: FormControl = get(key);
-      if (control) {
-        control.patchValue(value[key]);
-      }
-    });
-    setState((state: any) => ({
-      ...state,
-    }));
-  };
-
-  const getValue = (): { [key: string]: any } => {
-    const value: { [key: string]: any } = {};
-    Object.keys(state.controls).forEach((key: string) => {
-      const control: FormControl = get(key);
-      if (control.props[2]?.toDTO && control.value) {
-        let dto = control.props[2]?.toDTO(control.value);
-        Object.keys(dto).forEach((dtoKey) => {
-          value[dtoKey] = dto[dtoKey];
-        });
-      } else {
-        value[key] = control.value;
-      }
-    });
-    return value;
-  };
-
-  const getFormData = (): FormData => {
-    const formData = new FormData();
-    Object.keys(state.controls).forEach((key: string) => {
-      formData.append(key, get(key).value);
-    });
-    return formData;
-  };
-
-  const validate = () => {
-    Object.keys(state.controls).forEach((key: string) => {
-      get(key).markAsTouched();
-    });
-    setState((state: any) => ({
-      ...state,
-    }));
-  };
-
-  const getIsValid = (): boolean => {
-    return (
-      Object.keys(state.controls)
-        .map((key) => get(key).errors)
-        .filter((error) => error).length === 0
-    );
-  };
-
-  const addControl = (controlName: string, props: FormControlProps) => {
-    const controls = state.controls;
-    if (controls[controlName]) return;
-    controls[controlName] = new FormControl(props, controlName, {
-      reloadState,
-      get,
-    });
-    setState((state: any) => ({
-      ...state,
-      controls,
-    }));
-  };
-
-  const removeControl = (controlName: string): void => {
-    const controls = state.controls;
-    if (!controls[controlName]) return;
-    delete controls[controlName];
-    setState((state: any) => ({
-      ...state,
-      controls,
-    }));
-  };
-
-  return {
-    ...state,
-    get,
-    getValue,
-    getFormData,
-    patchValue,
-    validate,
-    getIsValid,
-    addControl,
-    removeControl,
-  };
+  return state.group;
 };
