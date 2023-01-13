@@ -106,7 +106,6 @@ function App() {
   });
 
   useEffect(() => {
-    // addAddressFormArray();
     setTimeout(() => {
       const gender = JenisKelaminModel.createList()[0];
       const record = {
@@ -116,7 +115,35 @@ function App() {
         email: "johndoe@gmaol.com",
         dob: "1990-03-31",
         age: "24",
-        // address: "Jln. Cendrawasi No.88",
+        address: [
+          {
+            street: "Address 1",
+            village: "Village",
+            subDistrict: "Sub district",
+            district: "District",
+            province: "Province",
+            country: "ID",
+            zipCode: "12345",
+          },
+          {
+            street: "Address 2",
+            village: "Village 2",
+            subDistrict: "Sub district 2",
+            district: "District 2",
+            province: "Province 2",
+            country: "ID 2",
+            zipCode: "12345 2",
+          },
+          {
+            street: "Address 3",
+            village: "Village 3",
+            subDistrict: "Sub district 3",
+            district: "District 3",
+            province: "Province 3",
+            country: "ID 3",
+            zipCode: "12345 3",
+          },
+        ],
         maritalStatus: StatusPerkawinanModel.createList()[3],
         no_akta_menikah: "00-77-88",
         no_akta_meninggal: "00-77-88",
@@ -128,6 +155,9 @@ function App() {
         hobi: HobiModel.createList().slice(0, 2),
       };
       onChangeMaritalStatus(record.maritalStatus);
+      if (form.get("address").controls.length === 0) {
+        record.address.forEach(() => addAddressFormArray());
+      }
       form.patchValue(record);
     }, 2000);
   }, []);
@@ -142,11 +172,16 @@ function App() {
         district: ["", Validators.required("Kabupaten wajib diisi")],
         province: ["", Validators.required("Provinsi wajib diisi")],
         country: ["", Validators.required("Negara wajib diisi")],
-        zipCode: ["", Validators.required("Kode pos wajib diisi")],
+        zipCode: [
+          "",
+          [
+            Validators.required("Kode pos wajib diisi"),
+            Validators.number("Kodepos harus terdiri dari angka"),
+            Validators.actualLength(5, "Kode pos harus terdiri dari 5 digit"),
+          ],
+        ],
       })
     );
-
-    console.log(form);
   };
 
   const handleSubmit = (e: any) => {
@@ -568,30 +603,186 @@ function App() {
                 <Components.Card
                   header={"Alamat ke-" + (index + 1)}
                   key={index}
+                  headerRight={() => (
+                    <button
+                      className="btn btn-danger btn-sm"
+                      type="button"
+                      onClick={() => {
+                        const formArray: FormArray = form.get(
+                          "address"
+                        ) as FormArray;
+                        formArray.removeAt(index);
+                      }}
+                    >
+                      <em className="fas fa-times" />
+                    </button>
+                  )}
                 >
-                  <Components.Form.Group>
-                    <Components.Form.Group label="Street" required={true}>
-                      <textarea
-                        className={
-                          "form-control " +
-                          (formGroup.get("street").touched
-                            ? formGroup.get("street").isValid
-                              ? "is-valid"
-                              : "is-invalid"
-                            : "")
-                        }
-                        placeholder="Masukkan nama jalan"
-                        {...formGroup.get("street").nativeProps}
-                      />
-                      {formGroup.get("street").touched &&
-                      form.get("street").errors ? (
-                        <small className="text-danger">
-                          {formGroup.get("street").errors?.message}
-                        </small>
-                      ) : (
-                        <></>
-                      )}
-                    </Components.Form.Group>
+                  <Components.Form.Group label="Street" required={true}>
+                    <textarea
+                      className={
+                        "form-control " +
+                        (formGroup.get("street").touched
+                          ? formGroup.get("street").isValid
+                            ? "is-valid"
+                            : "is-invalid"
+                          : "")
+                      }
+                      placeholder="Masukkan nama jalan"
+                      {...formGroup.get("street").nativeProps}
+                    />
+                    {formGroup.get("street").touched &&
+                    formGroup.get("street").errors ? (
+                      <small className="text-danger">
+                        {formGroup.get("street").errors?.message}
+                      </small>
+                    ) : (
+                      <></>
+                    )}
+                  </Components.Form.Group>
+
+                  <Components.Form.Group label="Desa" required={true}>
+                    <input
+                      type="text"
+                      className={
+                        "form-control " +
+                        (formGroup.get("village").touched
+                          ? formGroup.get("village").isValid
+                            ? "is-valid"
+                            : "is-invalid"
+                          : "")
+                      }
+                      placeholder="Masukkan nama desa"
+                      {...formGroup.get("village").nativeProps}
+                    />
+                    {formGroup.get("village").touched &&
+                    formGroup.get("village").errors ? (
+                      <small className="text-danger">
+                        {formGroup.get("village").errors?.message}
+                      </small>
+                    ) : (
+                      <></>
+                    )}
+                  </Components.Form.Group>
+
+                  <Components.Form.Group label="Kecamatan" required={true}>
+                    <input
+                      type="text"
+                      className={
+                        "form-control " +
+                        (formGroup.get("subDistrict").touched
+                          ? formGroup.get("subDistrict").isValid
+                            ? "is-valid"
+                            : "is-invalid"
+                          : "")
+                      }
+                      placeholder="Masukkan nama kecamatan"
+                      {...formGroup.get("subDistrict").nativeProps}
+                    />
+                    {formGroup.get("subDistrict").touched &&
+                    formGroup.get("subDistrict").errors ? (
+                      <small className="text-danger">
+                        {formGroup.get("subDistrict").errors?.message}
+                      </small>
+                    ) : (
+                      <></>
+                    )}
+                  </Components.Form.Group>
+
+                  <Components.Form.Group label="Kabupaten" required={true}>
+                    <input
+                      type="text"
+                      className={
+                        "form-control " +
+                        (formGroup.get("district").touched
+                          ? formGroup.get("district").isValid
+                            ? "is-valid"
+                            : "is-invalid"
+                          : "")
+                      }
+                      placeholder="Masukkan nama kabupaten"
+                      {...formGroup.get("district").nativeProps}
+                    />
+                    {formGroup.get("district").touched &&
+                    formGroup.get("district").errors ? (
+                      <small className="text-danger">
+                        {formGroup.get("district").errors?.message}
+                      </small>
+                    ) : (
+                      <></>
+                    )}
+                  </Components.Form.Group>
+
+                  <Components.Form.Group label="Provinsi" required={true}>
+                    <input
+                      type="text"
+                      className={
+                        "form-control " +
+                        (formGroup.get("province").touched
+                          ? formGroup.get("province").isValid
+                            ? "is-valid"
+                            : "is-invalid"
+                          : "")
+                      }
+                      placeholder="Masukkan nama provinsi"
+                      {...formGroup.get("province").nativeProps}
+                    />
+                    {formGroup.get("province").touched &&
+                    formGroup.get("province").errors ? (
+                      <small className="text-danger">
+                        {formGroup.get("province").errors?.message}
+                      </small>
+                    ) : (
+                      <></>
+                    )}
+                  </Components.Form.Group>
+
+                  <Components.Form.Group label="Negara" required={true}>
+                    <input
+                      type="text"
+                      className={
+                        "form-control " +
+                        (formGroup.get("country").touched
+                          ? formGroup.get("country").isValid
+                            ? "is-valid"
+                            : "is-invalid"
+                          : "")
+                      }
+                      placeholder="Masukkan nama provinsi"
+                      {...formGroup.get("country").nativeProps}
+                    />
+                    {formGroup.get("country").touched &&
+                    formGroup.get("country").errors ? (
+                      <small className="text-danger">
+                        {formGroup.get("country").errors?.message}
+                      </small>
+                    ) : (
+                      <></>
+                    )}
+                  </Components.Form.Group>
+
+                  <Components.Form.Group label="Kode POS" required={true}>
+                    <input
+                      type="text"
+                      className={
+                        "form-control " +
+                        (formGroup.get("zipCode").touched
+                          ? formGroup.get("zipCode").isValid
+                            ? "is-valid"
+                            : "is-invalid"
+                          : "")
+                      }
+                      placeholder="Masukkan kodepos"
+                      {...formGroup.get("zipCode").nativeProps}
+                    />
+                    {formGroup.get("zipCode").touched &&
+                    formGroup.get("zipCode").errors ? (
+                      <small className="text-danger">
+                        {formGroup.get("zipCode").errors?.message}
+                      </small>
+                    ) : (
+                      <></>
+                    )}
                   </Components.Form.Group>
                 </Components.Card>
               )

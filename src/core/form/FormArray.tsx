@@ -11,6 +11,7 @@ interface FormArrayProps extends AbstractControlProps {
   setValue: (value: any) => void;
   markAllAsTouched: () => void;
   push: (props: FormGroup) => void;
+  removeAt: (index: number) => void;
 }
 
 export class FormArray implements FormArrayProps {
@@ -22,7 +23,7 @@ export class FormArray implements FormArrayProps {
   constructor(public controls: FormGroup[]) {}
 
   public get value(): any {
-    return [];
+    return this.controls.map((control) => control.value);
   }
 
   public patchValue(values: Array<any>): void {
@@ -58,6 +59,11 @@ export class FormArray implements FormArrayProps {
   public push(props: FormGroup): void {
     props.setParent(this.parent);
     this.controls.push(props);
+    this.reloadState();
+  }
+
+  public removeAt(index: number): void {
+    this.controls.splice(index, 1);
     this.reloadState();
   }
 
