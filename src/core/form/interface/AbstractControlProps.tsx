@@ -1,4 +1,4 @@
-import { FormControl } from "../FormControl";
+import { ControlPropsType } from "../type/ControlProps";
 import { ValidationError } from "../type/ValidationError";
 import { FormParentProps } from "./FormParentProps";
 
@@ -7,7 +7,7 @@ export interface AbstractControlProps {
   patchValue: (value: any) => void;
   isValid: boolean;
   errors: ValidationError;
-  controls: { [key: string]: FormControl };
-  parent: FormParentProps;
+  controls: ControlPropsType;
+  parent?: FormParentProps;
   setParent: (parent: FormParentProps) => void;
 }

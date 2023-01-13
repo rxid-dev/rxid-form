@@ -1,20 +1,31 @@
+import { FormArray } from "./FormArray";
 import { FormControl, FormControlValueProps } from "./FormControl";
 import { FormGroup } from "./FormGroup";
 import { FormParentProps } from "./interface/FormParentProps";
 
 interface FormControlProps {
-  [key: string]: FormControlValueProps;
+  [key: string]: FormControlValueProps | FormArray;
 }
 
 export const formBuilder = {
-  group: (props: FormControlProps, parent: FormParentProps): FormGroup => {
+  group: (props: FormControlProps, parent?: FormParentProps): FormGroup => {
     const formGroup = new FormGroup({});
-    formGroup.setParent(parent);
-    const controls: { [key: string]: FormControl } = {};
+    parent && formGroup.setParent(parent);
+    const controls: { [key: string]: FormControl | FormArray } = {};
     Object.keys(props).forEach((key: string) => {
-      controls[key] = new FormControl(props[key], key, parent);
+      const prop: FormControlValueProps | FormArray = props[key];
+      if (prop instanceof FormArray) {
+        prop.setParent(parent);
+        controls[key] = prop;
+      } else {
+        controls[key] = new FormControl(prop, key, parent);
+      }
     });
     formGroup.setControls(controls);
     return formGroup;
+  },
+  array: () => {
+    const formArray = new FormArray([]);
+    return formArray;
   },
 };

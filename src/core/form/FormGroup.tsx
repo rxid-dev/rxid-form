@@ -1,3 +1,4 @@
+import { FormArray } from "./FormArray";
 import { FormControl, FormControlValueProps } from "./FormControl";
 import { AbstractControlProps } from "./interface/AbstractControlProps";
 import { FormParentProps } from "./interface/FormParentProps";
@@ -9,20 +10,20 @@ export interface FormGroupProps extends AbstractControlProps {
   validate: () => void;
   getFormData: () => FormData;
   setControls: (controls: { [key: string]: FormControl }) => void;
-  get: (controlName: string) => FormControl;
+  get: (controlName: string) => FormControl | FormArray;
 }
 
 export class FormGroup implements FormGroupProps {
-  public parent: FormParentProps;
-  constructor(public controls: { [key: string]: FormControl }) {}
+  public parent?: FormParentProps;
+  constructor(public controls: { [key: string]: FormControl | FormArray }) {}
   public patchValue(value: { [key: string]: any }) {
     Object.keys(value).forEach((key) => {
-      const control: FormControl = this.get(key);
+      const control: FormControl | FormArray = this.get(key);
       if (control) {
         control.patchValue(value[key]);
       }
     });
-    this.parent.reloadState();
+    this.reloadState();
   }
 
   public get errors(): ValidationError {
@@ -38,8 +39,12 @@ export class FormGroup implements FormGroupProps {
   public get value(): any {
     const value: { [key: string]: any } = {};
     Object.keys(this.controls).forEach((key: string) => {
-      const control: FormControl = this.get(key);
-      if (control.props[2]?.toDTO && control.value) {
+      const control: FormControl | FormArray = this.get(key);
+      if (
+        !(control instanceof FormArray) &&
+        control.props[2]?.toDTO &&
+        control.value
+      ) {
         let dto = control.props[2]?.toDTO(control.value);
         Object.keys(dto).forEach((dtoKey) => {
           value[dtoKey] = dto[dtoKey];
@@ -51,44 +56,52 @@ export class FormGroup implements FormGroupProps {
     return value;
   }
 
-  public get(controlName: string): FormControl {
+  public get(controlName: string): FormControl | FormArray {
     return this.controls[controlName];
   }
 
-  public setControls(controls: { [key: string]: FormControl }): void {
+  public setControls(controls: {
+    [key: string]: FormControl | FormArray;
+  }): void {
     this.controls = controls;
   }
 
-  public setParent(parent: FormParentProps): void {
+  public setParent(parent?: FormParentProps): void {
     this.parent = parent;
+    Object.keys(this.controls).forEach((key: string) => {
+      const control = this.get(key);
+      control.setParent(parent);
+    });
   }
 
   public addControl(controlName: string, props: FormControlValueProps) {
     const controls = this.controls;
     if (controls[controlName]) return;
     controls[controlName] = new FormControl(props, controlName, this.parent);
-    this.parent.reloadState();
+    this.reloadState();
   }
 
   public removeControl(controlName: string): void {
     const controls = this.controls;
     if (!controls[controlName]) return;
     delete controls[controlName];
-    this.parent.reloadState();
+    this.reloadState();
   }
 
   public validate(): void {
-    Object.keys(this.controls).forEach((key: string) => {
-      this.get(key).markAsTouched();
-    });
-    this.parent.reloadState();
+    this.markAllAsTouched();
+    this.reloadState();
   }
 
   public getFormData(): FormData {
     const formData = new FormData();
     Object.keys(this.controls).forEach((key: string) => {
-      const control: FormControl = this.get(key);
-      if (control.props[2]?.toDTO && control.value) {
+      const control: FormControl | FormArray = this.get(key);
+      if (
+        !(control instanceof FormArray) &&
+        control.props[2]?.toDTO &&
+        control.value
+      ) {
         let dto = control.props[2]?.toDTO(control.value);
         Object.keys(dto).forEach((dtoKey) => {
           formData.append(dtoKey, dto[dtoKey]);
@@ -98,5 +111,19 @@ export class FormGroup implements FormGroupProps {
       }
     });
     return formData;
+  }
+
+  public markAllAsTouched(): void {
+    Object.keys(this.controls).forEach((key: string) => {
+      const control = this.get(key);
+      control instanceof FormArray
+        ? control.markAllAsTouched()
+        : control.markAsTouched();
+    });
+  }
+
+  private reloadState(): void {
+    if (!this.parent) return;
+    this.parent.reloadState();
   }
 }

@@ -20,6 +20,7 @@ interface FormControlProps extends AbstractControlProps {
   markAsDirty: () => void;
   markAsTouched: () => void;
   nativeProps: FormControlNativeProps;
+  setValue: (value: any) => void;
 }
 
 export class FormControl implements FormControlProps {
@@ -32,7 +33,7 @@ export class FormControl implements FormControlProps {
   constructor(
     public props: FormControlValueProps,
     public name: string,
-    public parent: FormParentProps
+    public parent?: FormParentProps
   ) {
     this.value = props[0];
     this.errors = this.createErrors(props[0]);
@@ -51,7 +52,7 @@ export class FormControl implements FormControlProps {
     }
 
     this.isValid = !this.errors;
-    this.parent.reloadState();
+    this.reloadState();
   }
 
   // set value from component or input
@@ -59,7 +60,7 @@ export class FormControl implements FormControlProps {
     this.value = value;
     this.errors = this.createErrors(value);
     this.isValid = !this.errors;
-    this.parent.reloadState();
+    this.reloadState();
   }
 
   public markAsTouched(): void {
@@ -79,7 +80,7 @@ export class FormControl implements FormControlProps {
       },
       onBlur: () => {
         this.markAsTouched();
-        this.parent.reloadState();
+        this.reloadState();
       },
       name: this.name,
     };
@@ -97,7 +98,12 @@ export class FormControl implements FormControlProps {
     );
   }
 
-  public setParent(parent: FormParentProps): void {
+  public setParent(parent?: FormParentProps): void {
     this.parent = parent;
+  }
+
+  private reloadState(): void {
+    if (!this.parent) return;
+    this.parent.reloadState();
   }
 }

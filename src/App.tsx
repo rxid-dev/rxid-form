@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.scss";
 import { FormControl } from "./core/form";
+import { FormArray } from "./core/form/FormArray";
+import { formBuilder } from "./core/form/formBuilder";
+import { FormGroup } from "./core/form/FormGroup";
 import { useForm } from "./core/form/useForm";
 import { Components } from "./shared/components";
 import {
@@ -55,7 +58,7 @@ function App() {
         Validators.max(30, "Anda harus berusia kurang dari 31 tahun"),
       ],
     ],
-    address: ["", Validators.required("Alamat wajib diisi")],
+    // address: ["", Validators.required("Alamat wajib diisi")],
     maritalStatus: [
       "",
       Validators.required("Statis perkawinan wajib dipilih"),
@@ -99,9 +102,11 @@ function App() {
       false,
       Validators.required("Syarat dan ketentuan wajib disetujui"),
     ],
+    address: formBuilder.array(),
   });
 
   useEffect(() => {
+    // addAddressFormArray();
     setTimeout(() => {
       const gender = JenisKelaminModel.createList()[0];
       const record = {
@@ -111,7 +116,7 @@ function App() {
         email: "johndoe@gmaol.com",
         dob: "1990-03-31",
         age: "24",
-        address: "Jln. Cendrawasi No.88",
+        // address: "Jln. Cendrawasi No.88",
         maritalStatus: StatusPerkawinanModel.createList()[3],
         no_akta_menikah: "00-77-88",
         no_akta_meninggal: "00-77-88",
@@ -127,10 +132,26 @@ function App() {
     }, 2000);
   }, []);
 
+  const addAddressFormArray = () => {
+    const control: FormArray = form.get("address") as FormArray;
+    control.push(
+      formBuilder.group({
+        street: ["", Validators.required("Nama jalan wajib diisi")],
+        village: ["", Validators.required("Desa wajib diisi")],
+        subDistrict: ["", Validators.required("Kecamatan wajib diisi")],
+        district: ["", Validators.required("Kabupaten wajib diisi")],
+        province: ["", Validators.required("Provinsi wajib diisi")],
+        country: ["", Validators.required("Negara wajib diisi")],
+        zipCode: ["", Validators.required("Kode pos wajib diisi")],
+      })
+    );
+
+    console.log(form);
+  };
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     form.validate();
-    console.log(form.isValid);
     if (form.isValid) {
       console.log(form.value);
     }
@@ -304,28 +325,6 @@ function App() {
             )}
           </Components.Form.Group>
 
-          <Components.Form.Group label="Alamat" required={true}>
-            <textarea
-              className={
-                "form-control " +
-                (form.get("address").touched
-                  ? form.get("address").isValid
-                    ? "is-valid"
-                    : "is-invalid"
-                  : "")
-              }
-              placeholder="Masukkan alamat Anda"
-              {...form.get("address").nativeProps}
-            />
-            {form.get("address").touched && form.get("address").errors ? (
-              <small className="text-danger">
-                {form.get("address").errors?.message}
-              </small>
-            ) : (
-              <></>
-            )}
-          </Components.Form.Group>
-
           <Components.Form.Group label="Status Perkawinan" required={true}>
             <select
               className={
@@ -483,7 +482,9 @@ function App() {
                       ) !== -1
                     }
                     onChange={(e) => {
-                      const control: FormControl = form.get("hobi");
+                      const control: FormControl = form.get(
+                        "hobi"
+                      ) as FormControl;
                       const value = control.value || [];
                       if (e.target.checked) {
                         value.push(hobi);
@@ -533,7 +534,9 @@ function App() {
                 {...form.get("code").nativeProps}
                 checked={!!form.get("termAndCondition").value}
                 onChange={(e) => {
-                  const control: FormControl = form.get("termAndCondition");
+                  const control: FormControl = form.get(
+                    "termAndCondition"
+                  ) as FormControl;
                   control.setValue(e.target.checked);
                   control.markAsTouched();
                 }}
@@ -551,6 +554,49 @@ function App() {
               <></>
             )}
           </Components.Form.Group>
+
+          <div className="my-4">
+            <button
+              className="btn btn-primary"
+              onClick={() => addAddressFormArray()}
+              type="button"
+            >
+              Add Address
+            </button>
+            {(form.get("address").controls as Array<FormGroup>).map(
+              (formGroup: FormGroup, index) => (
+                <Components.Card
+                  header={"Alamat ke-" + (index + 1)}
+                  key={index}
+                >
+                  <Components.Form.Group>
+                    <Components.Form.Group label="Street" required={true}>
+                      <textarea
+                        className={
+                          "form-control " +
+                          (formGroup.get("street").touched
+                            ? formGroup.get("street").isValid
+                              ? "is-valid"
+                              : "is-invalid"
+                            : "")
+                        }
+                        placeholder="Masukkan nama jalan"
+                        {...formGroup.get("street").nativeProps}
+                      />
+                      {formGroup.get("street").touched &&
+                      form.get("street").errors ? (
+                        <small className="text-danger">
+                          {formGroup.get("street").errors?.message}
+                        </small>
+                      ) : (
+                        <></>
+                      )}
+                    </Components.Form.Group>
+                  </Components.Form.Group>
+                </Components.Card>
+              )
+            )}
+          </div>
 
           <button className="btn btn-primary">
             <em className="fas fa-plus"></em> Add
