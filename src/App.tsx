@@ -24,6 +24,7 @@ function App() {
   const form = useForm({
     // start example
     alphaNumeric: [""],
+    currency: ["123456789"],
     // end example
     code: [
       "",
@@ -241,6 +242,13 @@ function App() {
           <Components.Form.Input.AlphaNumeric
             control={form.get("alphaNumeric") as FormControl}
             placeholder="Masukkan alphanumeric Anda"
+          />
+        </Components.Form.Group>
+
+        <Components.Form.Group label="Currency" required={true}>
+          <Components.Form.Input.Currency
+            control={form.get("currency") as FormControl}
+            placeholder="Masukkan currency Anda"
           />
         </Components.Form.Group>
       </Components.Card>
