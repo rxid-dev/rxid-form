@@ -250,7 +250,7 @@ function App() {
         )}
       >
         <Components.Form.Group label="NPWP" required={true}>
-          <Components.Form.Input.Text
+          <Components.Form.Input.Numeric
             control={control}
             placeholder="Masukkan NPWP Anda"
           />
@@ -274,7 +274,7 @@ function App() {
           </Components.Form.Group>
 
           <Components.Form.Group label="NIK" required={true}>
-            <Components.Form.Input.Text
+            <Components.Form.Input.Numeric
               control={form.get("nik") as FormControl}
               placeholder="Masukkan NIK Anda"
             />
@@ -584,7 +584,7 @@ function App() {
                   </Components.Form.Group>
 
                   <Components.Form.Group label="Kode POS" required={true}>
-                    <Components.Form.Input.Text
+                    <Components.Form.Input.Numeric
                       control={formGroup.get("zipCode") as FormControl}
                       placeholder="Masukkan kodepos"
                     />
