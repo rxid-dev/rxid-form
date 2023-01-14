@@ -1,3 +1,4 @@
+import { AlphaNumeric } from "./AlphaNumeric";
 import { InputDate } from "./Date";
 import { InputNumber } from "./Number";
 import { InputNumeric } from "./Numeric";
@@ -7,4 +8,5 @@ export const Input = {
   Date: InputDate,
   Number: InputNumber,
   Numeric: InputNumeric,
+  AlphaNumeric: AlphaNumeric,
 };

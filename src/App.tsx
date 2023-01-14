@@ -22,6 +22,9 @@ function App() {
   });
 
   const form = useForm({
+    // start example
+    alphaNumeric: [""],
+    // end example
     code: [
       "",
       [
@@ -232,6 +235,16 @@ function App() {
         .map((val, index) => {
           return <Components.CustomComponent key={val + index + 1} />;
         })}
+
+      <Components.Card header="Example Form">
+        <Components.Form.Group label="Alphanumeric" required={true}>
+          <Components.Form.Input.AlphaNumeric
+            control={form.get("alphaNumeric") as FormControl}
+            placeholder="Masukkan alphanumeric Anda"
+          />
+        </Components.Form.Group>
+      </Components.Card>
+
       <Components.Card
         header="User Control"
         headerRight={() => (
