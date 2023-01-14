@@ -555,26 +555,10 @@ function App() {
                   )}
                 >
                   <Components.Form.Group label="Street" required={true}>
-                    <textarea
-                      className={
-                        "form-control " +
-                        (formGroup.get("street").touched
-                          ? formGroup.get("street").isValid
-                            ? "is-valid"
-                            : "is-invalid"
-                          : "")
-                      }
+                    <Components.Form.TextArea
+                      control={formGroup.get("street") as FormControl}
                       placeholder="Masukkan nama jalan"
-                      {...formGroup.get("street").nativeProps}
                     />
-                    {formGroup.get("street").touched &&
-                    formGroup.get("street").errors ? (
-                      <small className="text-danger">
-                        {formGroup.get("street").errors?.message}
-                      </small>
-                    ) : (
-                      <></>
-                    )}
                   </Components.Form.Group>
 
                   <Components.Form.Group label="Desa" required={true}>
