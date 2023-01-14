@@ -4,6 +4,7 @@ import { FormControl } from "./core/form";
 import { FormArray } from "./core/form/FormArray";
 import { formBuilder } from "./core/form/formBuilder";
 import { FormGroup } from "./core/form/FormGroup";
+import { useControl } from "./core/form/useControl";
 import { useForm } from "./core/form/useForm";
 import { Components } from "./shared/components";
 import {
@@ -105,6 +106,15 @@ function App() {
     address: formBuilder.array(),
   });
 
+  const control = useControl("npwp", [
+    "",
+    [
+      Validators.required("NPWP wajib diisi"),
+      Validators.number("NPWP harus tediri dari angka"),
+      Validators.actualLength(15, "NPWP harus tediri dari 15 digit"),
+    ],
+  ]);
+
   useEffect(() => {
     setTimeout(() => {
       const gender = JenisKelaminModel.createList()[0];
@@ -112,6 +122,7 @@ function App() {
         code: "XYZ",
         name: "John Doe",
         nik: "1234567890123456",
+        npwp: "123456789012345",
         email: "johndoe@gmaol.com",
         dob: "1990-03-31",
         age: "24",
@@ -132,7 +143,7 @@ function App() {
             district: "District 2",
             province: "Province 2",
             country: "ID 2",
-            zipCode: "12345 2",
+            zipCode: "12345",
           },
           {
             street: "Address 3",
@@ -141,7 +152,7 @@ function App() {
             district: "District 3",
             province: "Province 3",
             country: "ID 3",
-            zipCode: "12345 3",
+            zipCode: "12345",
           },
         ],
         maritalStatus: StatusPerkawinanModel.createList()[3],
@@ -159,6 +170,7 @@ function App() {
         record.address.forEach(() => addAddressFormArray());
       }
       form.patchValue(record);
+      control.patchValue(record.npwp);
     }, 2000);
   }, []);
 
@@ -220,6 +232,45 @@ function App() {
         .map((val, index) => {
           return <Components.CustomComponent key={val + index + 1} />;
         })}
+      <Components.Card
+        header="User Control"
+        headerRight={() => (
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={() => {
+              control.validate();
+              if (control.isValid) {
+                // save to backend
+                console.log(control.value);
+              }
+            }}
+          >
+            Submit
+          </button>
+        )}
+      >
+        <Components.Form.Group label="NPWP" required={true}>
+          <input
+            type="text"
+            className={
+              "form-control " +
+              (control.touched
+                ? control.isValid
+                  ? "is-valid"
+                  : "is-invalid"
+                : "")
+            }
+            placeholder="Masukkan NPWP Anda"
+            {...control.nativeProps}
+          />
+          {control.touched && control.errors ? (
+            <small className="text-danger">{control.errors?.message}</small>
+          ) : (
+            <></>
+          )}
+        </Components.Form.Group>
+      </Components.Card>
+
       <Components.Card header="User Form">
         <form onSubmit={handleSubmit}>
           <Components.Form.Group label="Code" required={true}>
@@ -789,9 +840,11 @@ function App() {
             )}
           </div>
 
-          <button className="btn btn-primary">
-            <em className="fas fa-plus"></em> Add
-          </button>
+          <div className="d-flex justify-content-end">
+            <button className="btn btn-primary">
+              <i className="fa-solid fa-paper-plane"></i> Save
+            </button>
+          </div>
         </form>
       </Components.Card>
     </div>

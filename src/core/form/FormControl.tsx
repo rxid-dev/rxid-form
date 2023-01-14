@@ -19,6 +19,7 @@ interface FormControlProps extends AbstractControlProps {
   dirty: boolean;
   markAsDirty: () => void;
   markAsTouched: () => void;
+  validate: () => void;
   nativeProps: FormControlNativeProps;
   setValue: (value: any) => void;
 }
@@ -100,6 +101,11 @@ export class FormControl implements FormControlProps {
 
   public setParent(parent?: FormParentProps): void {
     this.parent = parent;
+  }
+
+  public validate(): void {
+    this.markAsTouched();
+    this.reloadState();
   }
 
   private reloadState(): void {
