@@ -250,165 +250,55 @@ function App() {
         )}
       >
         <Components.Form.Group label="NPWP" required={true}>
-          <input
-            type="text"
-            className={
-              "form-control " +
-              (control.touched
-                ? control.isValid
-                  ? "is-valid"
-                  : "is-invalid"
-                : "")
-            }
+          <Components.Form.Input.Text
+            control={control}
             placeholder="Masukkan NPWP Anda"
-            {...control.nativeProps}
           />
-          {control.touched && control.errors ? (
-            <small className="text-danger">{control.errors?.message}</small>
-          ) : (
-            <></>
-          )}
         </Components.Form.Group>
       </Components.Card>
 
       <Components.Card header="User Form">
         <form onSubmit={handleSubmit}>
           <Components.Form.Group label="Code" required={true}>
-            <input
-              type="text"
-              className={
-                "form-control " +
-                (form.get("code").touched
-                  ? form.get("code").isValid
-                    ? "is-valid"
-                    : "is-invalid"
-                  : "")
-              }
+            <Components.Form.Input.Text
+              control={form.get("code") as FormControl}
               placeholder="Masukkan code Anda"
-              {...form.get("code").nativeProps}
             />
-            {form.get("code").touched && form.get("code").errors ? (
-              <small className="text-danger">
-                {form.get("code").errors?.message}
-              </small>
-            ) : (
-              <></>
-            )}
           </Components.Form.Group>
 
           <Components.Form.Group label="Nama" required={true}>
-            <input
-              type="text"
-              className={
-                "form-control " +
-                (form.get("name").touched
-                  ? form.get("name").isValid
-                    ? "is-valid"
-                    : "is-invalid"
-                  : "")
-              }
+            <Components.Form.Input.Text
+              control={form.get("name") as FormControl}
               placeholder="Masukkan nama Anda"
-              {...form.get("name").nativeProps}
             />
-            {form.get("name").touched && form.get("name").errors ? (
-              <small className="text-danger">
-                {form.get("name").errors?.message}
-              </small>
-            ) : (
-              <></>
-            )}
           </Components.Form.Group>
 
           <Components.Form.Group label="NIK" required={true}>
-            <input
-              type="text"
-              className={
-                "form-control " +
-                (form.get("nik").touched
-                  ? form.get("nik").isValid
-                    ? "is-valid"
-                    : "is-invalid"
-                  : "")
-              }
+            <Components.Form.Input.Text
+              control={form.get("nik") as FormControl}
               placeholder="Masukkan NIK Anda"
-              {...form.get("nik").nativeProps}
             />
-            {form.get("nik").touched && form.get("nik").errors ? (
-              <small className="text-danger">
-                {form.get("nik").errors?.message}
-              </small>
-            ) : (
-              <></>
-            )}
           </Components.Form.Group>
 
           <Components.Form.Group label="Email" required={true}>
-            <input
-              type="text"
-              className={
-                "form-control " +
-                (form.get("email").touched
-                  ? form.get("email").isValid
-                    ? "is-valid"
-                    : "is-invalid"
-                  : "")
-              }
+            <Components.Form.Input.Text
+              control={form.get("email") as FormControl}
               placeholder="Masukkan email Anda"
-              {...form.get("email").nativeProps}
             />
-            {form.get("email").touched && form.get("email").errors ? (
-              <small className="text-danger">
-                {form.get("email").errors?.message}
-              </small>
-            ) : (
-              <></>
-            )}
           </Components.Form.Group>
 
           <Components.Form.Group label="Tanggal Lahir" required={true}>
-            <input
-              type="date"
-              className={
-                "form-control " +
-                (form.get("dob").touched
-                  ? form.get("dob").isValid
-                    ? "is-valid"
-                    : "is-invalid"
-                  : "")
-              }
-              placeholder="Pilih tanggal lahir Anda"
-              {...form.get("dob").nativeProps}
+            <Components.Form.Input.Date
+              control={form.get("dob") as FormControl}
+              placeholder="Masukkan tanggal lahir Anda"
             />
-            {form.get("dob").touched && form.get("dob").errors ? (
-              <small className="text-danger">
-                {form.get("dob").errors?.message}
-              </small>
-            ) : (
-              <></>
-            )}
           </Components.Form.Group>
 
           <Components.Form.Group label="Usia" required={true}>
-            <input
-              type="number"
-              className={
-                "form-control " +
-                (form.get("age").touched
-                  ? form.get("age").isValid
-                    ? "is-valid"
-                    : "is-invalid"
-                  : "")
-              }
+            <Components.Form.Input.Number
+              control={form.get("age") as FormControl}
               placeholder="Masukkan usia Anda"
-              {...form.get("age").nativeProps}
             />
-            {form.get("age").touched && form.get("age").errors ? (
-              <small className="text-danger">
-                {form.get("age").errors?.message}
-              </small>
-            ) : (
-              <></>
-            )}
           </Components.Form.Group>
 
           <Components.Form.Group label="Status Perkawinan" required={true}>
@@ -455,53 +345,19 @@ function App() {
 
           {form.get("no_akta_menikah") && (
             <Components.Form.Group label="Nomor Akta Menikah" required={true}>
-              <input
-                type="text"
-                className={
-                  "form-control " +
-                  (form.get("no_akta_menikah").touched
-                    ? form.get("no_akta_menikah").isValid
-                      ? "is-valid"
-                      : "is-invalid"
-                    : "")
-                }
+              <Components.Form.Input.Text
+                control={form.get("no_akta_menikah") as FormControl}
                 placeholder="Masukkan nomor akta menikah"
-                {...form.get("no_akta_menikah").nativeProps}
               />
-              {form.get("no_akta_menikah").touched &&
-              form.get("no_akta_menikah").errors ? (
-                <small className="text-danger">
-                  {form.get("no_akta_menikah").errors?.message}
-                </small>
-              ) : (
-                <></>
-              )}
             </Components.Form.Group>
           )}
 
           {form.get("no_akta_meninggal") && (
             <Components.Form.Group label="Nomor Akta Meninggal" required={true}>
-              <input
-                type="text"
-                className={
-                  "form-control " +
-                  (form.get("no_akta_meninggal").touched
-                    ? form.get("no_akta_meninggal").isValid
-                      ? "is-valid"
-                      : "is-invalid"
-                    : "")
-                }
+              <Components.Form.Input.Text
+                control={form.get("no_akta_meninggal") as FormControl}
                 placeholder="Masukkan nomor akta meninggal"
-                {...form.get("no_akta_meninggal").nativeProps}
               />
-              {form.get("no_akta_meninggal").touched &&
-              form.get("no_akta_meninggal").errors ? (
-                <small className="text-danger">
-                  {form.get("no_akta_meninggal").errors?.message}
-                </small>
-              ) : (
-                <></>
-              )}
             </Components.Form.Group>
           )}
 
@@ -693,147 +549,45 @@ function App() {
                   </Components.Form.Group>
 
                   <Components.Form.Group label="Desa" required={true}>
-                    <input
-                      type="text"
-                      className={
-                        "form-control " +
-                        (formGroup.get("village").touched
-                          ? formGroup.get("village").isValid
-                            ? "is-valid"
-                            : "is-invalid"
-                          : "")
-                      }
+                    <Components.Form.Input.Text
+                      control={formGroup.get("village") as FormControl}
                       placeholder="Masukkan nama desa"
-                      {...formGroup.get("village").nativeProps}
                     />
-                    {formGroup.get("village").touched &&
-                    formGroup.get("village").errors ? (
-                      <small className="text-danger">
-                        {formGroup.get("village").errors?.message}
-                      </small>
-                    ) : (
-                      <></>
-                    )}
                   </Components.Form.Group>
 
                   <Components.Form.Group label="Kecamatan" required={true}>
-                    <input
-                      type="text"
-                      className={
-                        "form-control " +
-                        (formGroup.get("subDistrict").touched
-                          ? formGroup.get("subDistrict").isValid
-                            ? "is-valid"
-                            : "is-invalid"
-                          : "")
-                      }
+                    <Components.Form.Input.Text
+                      control={formGroup.get("subDistrict") as FormControl}
                       placeholder="Masukkan nama kecamatan"
-                      {...formGroup.get("subDistrict").nativeProps}
                     />
-                    {formGroup.get("subDistrict").touched &&
-                    formGroup.get("subDistrict").errors ? (
-                      <small className="text-danger">
-                        {formGroup.get("subDistrict").errors?.message}
-                      </small>
-                    ) : (
-                      <></>
-                    )}
                   </Components.Form.Group>
 
                   <Components.Form.Group label="Kabupaten" required={true}>
-                    <input
-                      type="text"
-                      className={
-                        "form-control " +
-                        (formGroup.get("district").touched
-                          ? formGroup.get("district").isValid
-                            ? "is-valid"
-                            : "is-invalid"
-                          : "")
-                      }
+                    <Components.Form.Input.Text
+                      control={formGroup.get("district") as FormControl}
                       placeholder="Masukkan nama kabupaten"
-                      {...formGroup.get("district").nativeProps}
                     />
-                    {formGroup.get("district").touched &&
-                    formGroup.get("district").errors ? (
-                      <small className="text-danger">
-                        {formGroup.get("district").errors?.message}
-                      </small>
-                    ) : (
-                      <></>
-                    )}
                   </Components.Form.Group>
 
                   <Components.Form.Group label="Provinsi" required={true}>
-                    <input
-                      type="text"
-                      className={
-                        "form-control " +
-                        (formGroup.get("province").touched
-                          ? formGroup.get("province").isValid
-                            ? "is-valid"
-                            : "is-invalid"
-                          : "")
-                      }
+                    <Components.Form.Input.Text
+                      control={formGroup.get("province") as FormControl}
                       placeholder="Masukkan nama provinsi"
-                      {...formGroup.get("province").nativeProps}
                     />
-                    {formGroup.get("province").touched &&
-                    formGroup.get("province").errors ? (
-                      <small className="text-danger">
-                        {formGroup.get("province").errors?.message}
-                      </small>
-                    ) : (
-                      <></>
-                    )}
                   </Components.Form.Group>
 
                   <Components.Form.Group label="Negara" required={true}>
-                    <input
-                      type="text"
-                      className={
-                        "form-control " +
-                        (formGroup.get("country").touched
-                          ? formGroup.get("country").isValid
-                            ? "is-valid"
-                            : "is-invalid"
-                          : "")
-                      }
-                      placeholder="Masukkan nama provinsi"
-                      {...formGroup.get("country").nativeProps}
+                    <Components.Form.Input.Text
+                      control={formGroup.get("country") as FormControl}
+                      placeholder="Masukkan nama negara"
                     />
-                    {formGroup.get("country").touched &&
-                    formGroup.get("country").errors ? (
-                      <small className="text-danger">
-                        {formGroup.get("country").errors?.message}
-                      </small>
-                    ) : (
-                      <></>
-                    )}
                   </Components.Form.Group>
 
                   <Components.Form.Group label="Kode POS" required={true}>
-                    <input
-                      type="text"
-                      className={
-                        "form-control " +
-                        (formGroup.get("zipCode").touched
-                          ? formGroup.get("zipCode").isValid
-                            ? "is-valid"
-                            : "is-invalid"
-                          : "")
-                      }
+                    <Components.Form.Input.Text
+                      control={formGroup.get("zipCode") as FormControl}
                       placeholder="Masukkan kodepos"
-                      {...formGroup.get("zipCode").nativeProps}
                     />
-                    {formGroup.get("zipCode").touched &&
-                    formGroup.get("zipCode").errors ? (
-                      <small className="text-danger">
-                        {formGroup.get("zipCode").errors?.message}
-                      </small>
-                    ) : (
-                      <></>
-                    )}
                   </Components.Form.Group>
                 </Components.Card>
               )
