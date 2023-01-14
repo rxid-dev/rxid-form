@@ -358,43 +358,10 @@ function App() {
           )}
 
           <Components.Form.Group label="Jenis Kelamin" required={true}>
-            <>
-              {state.jenisKelaminList.map((jenisKelamin) => (
-                <div className="form-check" key={jenisKelamin.id}>
-                  <input
-                    className={
-                      "form-check-input " +
-                      (form.get("gender").touched
-                        ? form.get("gender").isValid
-                          ? "is-valid"
-                          : "is-invalid"
-                        : "")
-                    }
-                    type="radio"
-                    id={"jenisKelamin" + jenisKelamin.id}
-                    {...form.get("gender").nativeProps}
-                    value={jenisKelamin.id}
-                    checked={jenisKelamin.id === +form.get("gender").value?.id}
-                    onChange={() => {
-                      form.get("gender").setValue(jenisKelamin);
-                    }}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor={"jenisKelamin" + jenisKelamin.id}
-                  >
-                    {jenisKelamin.name}
-                  </label>
-                </div>
-              ))}
-              {form.get("gender").touched && form.get("gender").errors ? (
-                <small className="text-danger">
-                  {form.get("gender").errors?.message}
-                </small>
-              ) : (
-                <></>
-              )}
-            </>
+            <Components.Form.Radio
+              control={form.get("gender") as FormControl}
+              options={state.jenisKelaminList}
+            />
           </Components.Form.Group>
 
           <Components.Form.Group label="Hobi" required={true}>
