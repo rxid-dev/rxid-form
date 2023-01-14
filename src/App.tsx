@@ -331,45 +331,12 @@ function App() {
           </Components.Form.Group>
 
           <Components.Form.Group label="Status Perkawinan" required={true}>
-            <select
-              className={
-                "form-select " +
-                (form.get("maritalStatus").touched
-                  ? form.get("maritalStatus").isValid
-                    ? "is-valid"
-                    : "is-invalid"
-                  : "")
-              }
-              {...form.get("maritalStatus").nativeProps}
-              onChange={(e) => {
-                let value: any = e.target.value;
-                if (value) {
-                  const indexOfOption = state.statusPerkawinanList.findIndex(
-                    (statusPerkawinan) =>
-                      statusPerkawinan.id === +e.target.value
-                  );
-                  value = state.statusPerkawinanList[indexOfOption];
-                }
-                form.get("maritalStatus").setValue(value);
-                onChangeMaritalStatus(value);
-              }}
-              value={form.get("maritalStatus").value?.id}
-            >
-              <option value="">Pilih status perkawinan</option>
-              {state.statusPerkawinanList.map((statusPerkawinan) => (
-                <option value={statusPerkawinan.id} key={statusPerkawinan.id}>
-                  {statusPerkawinan.name}
-                </option>
-              ))}
-            </select>
-            {form.get("maritalStatus").touched &&
-            form.get("maritalStatus").errors ? (
-              <small className="text-danger">
-                {form.get("maritalStatus").errors?.message}
-              </small>
-            ) : (
-              <></>
-            )}
+            <Components.Form.Select
+              placeholder="Pilih status perkawinan"
+              options={state.statusPerkawinanList}
+              control={form.get("maritalStatus") as FormControl}
+              onChange={onChangeMaritalStatus}
+            />
           </Components.Form.Group>
 
           {form.get("no_akta_menikah") && (

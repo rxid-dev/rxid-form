@@ -3,7 +3,6 @@ import { FormProps } from "../interface/FormProps";
 
 interface Props extends FormProps {
   type?: "date" | "number" | "email";
-  onChange?: (value: any) => void;
   componentLeft?: () => JSX.Element;
 }
 
