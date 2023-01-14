@@ -365,99 +365,17 @@ function App() {
           </Components.Form.Group>
 
           <Components.Form.Group label="Hobi" required={true}>
-            <>
-              {state.hobiList.map((hobi) => (
-                <div className="form-check" key={hobi.id}>
-                  <input
-                    className={
-                      "form-check-input " +
-                      (form.get("hobi").touched
-                        ? form.get("hobi").isValid
-                          ? "is-valid"
-                          : "is-invalid"
-                        : "")
-                    }
-                    type="checkbox"
-                    id={"hobi" + hobi.id}
-                    {...form.get("code").nativeProps}
-                    value={hobi.id}
-                    checked={
-                      (form.get("hobi").value || []).findIndex(
-                        (val: HobiModel) => val.id === hobi.id
-                      ) !== -1
-                    }
-                    onChange={(e) => {
-                      const control: FormControl = form.get(
-                        "hobi"
-                      ) as FormControl;
-                      const value = control.value || [];
-                      if (e.target.checked) {
-                        value.push(hobi);
-                      } else {
-                        const indexOfHobi = value.findIndex(
-                          (val: HobiModel) => val.id === hobi.id
-                        );
-                        if (indexOfHobi !== -1) {
-                          value.splice(indexOfHobi, 1);
-                        }
-                      }
-                      control.setValue(value.length > 0 ? value : "");
-                      control.markAsTouched();
-                    }}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor={"hobi" + hobi.id}
-                  >
-                    {hobi.name}
-                  </label>
-                </div>
-              ))}
-              {form.get("hobi").touched && form.get("hobi").errors ? (
-                <small className="text-danger">
-                  {form.get("hobi").errors?.message}
-                </small>
-              ) : (
-                <></>
-              )}
-            </>
+            <Components.Form.CheckBox
+              control={form.get("hobi") as FormControl}
+              options={state.hobiList}
+            />
           </Components.Form.Group>
 
           <Components.Form.Group>
-            <div className="form-check">
-              <input
-                className={
-                  "form-check-input " +
-                  (form.get("termAndCondition").touched
-                    ? form.get("termAndCondition").isValid
-                      ? "is-valid"
-                      : "is-invalid"
-                    : "")
-                }
-                type="checkbox"
-                id="termAndCondition"
-                {...form.get("code").nativeProps}
-                checked={!!form.get("termAndCondition").value}
-                onChange={(e) => {
-                  const control: FormControl = form.get(
-                    "termAndCondition"
-                  ) as FormControl;
-                  control.setValue(e.target.checked);
-                  control.markAsTouched();
-                }}
-              />
-              <label className="form-check-label" htmlFor="termAndCondition">
-                Term and condition
-              </label>
-            </div>
-            {form.get("termAndCondition").touched &&
-            form.get("termAndCondition").errors ? (
-              <small className="text-danger">
-                {form.get("termAndCondition").errors?.message}
-              </small>
-            ) : (
-              <></>
-            )}
+            <Components.Form.CheckBox
+              control={form.get("termAndCondition") as FormControl}
+              placeholder="Term and condition"
+            />
           </Components.Form.Group>
 
           <div className="my-4">
