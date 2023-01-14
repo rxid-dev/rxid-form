@@ -1,6 +1,7 @@
 import { InputAlphaNumeric } from "./AlphaNumeric";
 import { InputCurrency } from "./Currency";
 import { InputDate } from "./Date";
+import { InputEmail } from "./Email";
 import { InputNumber } from "./Number";
 import { InputNumeric } from "./Numeric";
 import { InputTel } from "./Tel";
@@ -13,4 +14,5 @@ export const Input = {
   AlphaNumeric: InputAlphaNumeric,
   Currency: InputCurrency,
   Tel: InputTel,
+  Email: InputEmail,
 };

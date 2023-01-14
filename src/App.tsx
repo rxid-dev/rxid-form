@@ -310,7 +310,7 @@ function App() {
           </Components.Form.Group>
 
           <Components.Form.Group label="Email" required={true}>
-            <Components.Form.Input.Text
+            <Components.Form.Input.Email
               control={form.get("email") as FormControl}
               placeholder="Masukkan email Anda"
             />
