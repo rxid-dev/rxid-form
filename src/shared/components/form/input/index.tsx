@@ -3,6 +3,7 @@ import { InputCurrency } from "./Currency";
 import { InputDate } from "./Date";
 import { InputNumber } from "./Number";
 import { InputNumeric } from "./Numeric";
+import { InputTel } from "./Tel";
 import { InputText } from "./Text";
 export const Input = {
   Text: InputText,
@@ -11,4 +12,5 @@ export const Input = {
   Numeric: InputNumeric,
   AlphaNumeric: InputAlphaNumeric,
   Currency: InputCurrency,
+  Tel: InputTel,
 };

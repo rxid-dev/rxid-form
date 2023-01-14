@@ -38,6 +38,7 @@ export class FormControl implements FormControlProps {
   ) {
     this.value = props[0];
     this.errors = this.createErrors(props[0]);
+    this.isValid = !this.errors;
     this.touched = false;
     this.dirty = false;
   }

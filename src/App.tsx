@@ -25,6 +25,7 @@ function App() {
     // start example
     alphaNumeric: [""],
     currency: ["123456789"],
+    tel: [""],
     // end example
     code: [
       "",
@@ -249,6 +250,13 @@ function App() {
           <Components.Form.Input.Currency
             control={form.get("currency") as FormControl}
             placeholder="Masukkan currency Anda"
+          />
+        </Components.Form.Group>
+
+        <Components.Form.Group label="Tel" required={true}>
+          <Components.Form.Input.Tel
+            control={form.get("tel") as FormControl}
+            placeholder="Masukkan nomor hp Anda"
           />
         </Components.Form.Group>
       </Components.Card>
