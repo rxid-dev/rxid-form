@@ -3,6 +3,7 @@ import { FormControl, FormControlValueProps } from "./FormControl";
 import { AbstractControlProps } from "./interface/AbstractControlProps";
 import { FormParentProps } from "./interface/FormParentProps";
 import { ValidationError } from "./type/ValidationError";
+import { ValidatorFn } from "./type/ValidationFN";
 
 export interface FormGroupProps extends AbstractControlProps {
   addControl: (controlName: string, props: FormControlValueProps) => void;
@@ -125,6 +126,18 @@ export class FormGroup implements FormGroupProps {
   public reset(): void {
     Object.keys(this.controls).forEach((key: string) => {
       this.get(key).reset();
+    });
+  }
+
+  public setValidators(validators: ValidatorFn | Array<ValidatorFn>): void {
+    Object.keys(this.controls).forEach((key: string) => {
+      this.get(key).setValidators(validators);
+    });
+  }
+
+  public clearValidators(): void {
+    Object.keys(this.controls).forEach((key: string) => {
+      this.get(key).clearValidators();
     });
   }
 

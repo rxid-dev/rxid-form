@@ -4,6 +4,7 @@ import { FormOptionsProps } from "./interface/FormOptionsProps";
 export const Radio: FunctionComponent<FormOptionsProps> = ({
   control,
   options,
+  onChange,
 }) => {
   const [state] = useState({
     randomId: Math.ceil(Math.random() * 100),
@@ -29,6 +30,7 @@ export const Radio: FunctionComponent<FormOptionsProps> = ({
             checked={option.id === +control.value?.id}
             onChange={() => {
               control.setValue(option);
+              onChange && onChange(option);
             }}
           />
           <label

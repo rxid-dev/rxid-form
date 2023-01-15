@@ -3,6 +3,7 @@ import { AbstractControlProps } from "./interface/AbstractControlProps";
 import { FormControlNativeProps } from "./interface/FormControlNativeProps";
 import { FormParentProps } from "./interface/FormParentProps";
 import { ValidationError } from "./type/ValidationError";
+import { ValidatorFn } from "./type/ValidationFN";
 
 interface FormArrayProps extends AbstractControlProps {
   touched: boolean;
@@ -21,7 +22,6 @@ export class FormArray implements FormArrayProps {
   public dirty: boolean;
   public setValue: (value: any) => void;
   constructor(public controls: FormGroup[]) {}
-
   public get value(): any {
     return this.controls.map((control) => control.value);
   }
@@ -70,6 +70,18 @@ export class FormArray implements FormArrayProps {
   public reset(): void {
     this.controls.forEach((formGroup: FormGroup) => {
       formGroup.reset();
+    });
+  }
+
+  public setValidators(validators: ValidatorFn | Array<ValidatorFn>): void {
+    this.controls.forEach((formGroup: FormGroup) => {
+      formGroup.setValidators(validators);
+    });
+  }
+
+  public clearValidators(): void {
+    this.controls.forEach((formGroup: FormGroup) => {
+      formGroup.clearValidators();
     });
   }
 

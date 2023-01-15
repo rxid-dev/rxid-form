@@ -1,5 +1,6 @@
 import { ControlPropsType } from "../type/ControlProps";
 import { ValidationError } from "../type/ValidationError";
+import { ValidatorFn } from "../type/ValidationFN";
 import { FormParentProps } from "./FormParentProps";
 
 export interface AbstractControlProps {
@@ -11,4 +12,6 @@ export interface AbstractControlProps {
   parent?: FormParentProps;
   setParent: (parent: FormParentProps) => void;
   reset: () => void;
+  setValidators: (validators: ValidatorFn | Array<ValidatorFn>) => void;
+  clearValidators: () => void;
 }

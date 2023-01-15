@@ -115,6 +115,20 @@ export class FormControl implements FormControlProps {
     this.patchValue("");
   }
 
+  public setValidators(validators: ValidatorFn | ValidatorFn[]): void {
+    this.props[1] = validators;
+    this.errors = this.createErrors(this.value);
+    this.isValid = !this.errors;
+    this.reloadState();
+  }
+
+  public clearValidators(): void {
+    this.props[1] = [];
+    this.errors = null;
+    this.isValid = true;
+    this.reloadState();
+  }
+
   private reloadState(): void {
     if (!this.parent) return;
     this.parent.reloadState();

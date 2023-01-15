@@ -19,10 +19,26 @@ function App() {
     statusPerkawinanList: StatusPerkawinanModel.createList(),
     jenisKelaminList: JenisKelaminModel.createList(),
     hobiList: HobiModel.createList(),
+    validatorsList: [
+      {
+        id: 1,
+        name: "NONE",
+      },
+      {
+        id: 2,
+        name: "REQUIRED",
+      },
+      {
+        id: 3,
+        name: "NUMBER",
+      },
+    ],
   });
 
   const form = useForm({
     // start example
+    validators: [""],
+    validatorsInput: [""],
     alphaNumeric: ["123xYZ"],
     currency: ["123456789"],
     tel: ["0123456789"],
@@ -203,7 +219,6 @@ function App() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(form.get("gender"));
     form.validate();
     if (form.isValid) {
       console.log(form.value);
@@ -229,6 +244,23 @@ function App() {
     }
   };
 
+  const handleChangeValidators = (value: any) => {
+    if (value.id === 1) {
+      // clear all validators
+      form.get("validatorsInput").clearValidators();
+    } else if (value.id === 2) {
+      // add required validators and cut number validators
+      form
+        .get("validatorsInput")
+        .setValidators(Validators.required("Validator input wajib diisi"));
+    } else if (value.id === 3) {
+      // add number validators and cut required validators
+      form
+        .get("validatorsInput")
+        .setValidators(Validators.number("Validator input harus berisi angka"));
+    }
+  };
+
   return (
     <div className="container py-4">
       <h1 className="mb-0">React Form</h1>
@@ -240,6 +272,24 @@ function App() {
         })}
 
       <Components.Card header="Example Form">
+        <Components.Form.Group label="Validators Required" required={true}>
+          <Components.Form.Radio
+            control={form.get("validators") as FormControl}
+            options={state.validatorsList}
+            onChange={handleChangeValidators}
+          />
+        </Components.Form.Group>
+
+        <Components.Form.Group
+          label="Validators Input"
+          required={form.get("validators").value?.id === 2}
+        >
+          <Components.Form.Input.Text
+            control={form.get("validatorsInput") as FormControl}
+            placeholder="Masukkan beberapa karakter untuk divalidasi"
+          />
+        </Components.Form.Group>
+
         <Components.Form.Group label="Alphanumeric" required={true}>
           <Components.Form.Input.AlphaNumeric
             control={form.get("alphaNumeric") as FormControl}
