@@ -45,7 +45,7 @@ export class FormControl implements FormControlProps {
 
   // set value from module
   public patchValue(value: any): void {
-    if (this.props[2]?.toModel) {
+    if (this.props[2]?.toModel && value) {
       this.value = this.props[2]?.toModel(value);
       this.errors = this.createErrors(this.value);
     } else {
@@ -107,6 +107,12 @@ export class FormControl implements FormControlProps {
   public validate(): void {
     this.markAsTouched();
     this.reloadState();
+  }
+
+  public reset(): void {
+    this.touched = false;
+    this.dirty = false;
+    this.patchValue("");
   }
 
   private reloadState(): void {

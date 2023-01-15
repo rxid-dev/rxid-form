@@ -67,6 +67,12 @@ export class FormArray implements FormArrayProps {
     this.reloadState();
   }
 
+  public reset(): void {
+    this.controls.forEach((formGroup: FormGroup) => {
+      formGroup.reset();
+    });
+  }
+
   private reloadState(): void {
     if (!this.parent) return;
     this.parent.reloadState();

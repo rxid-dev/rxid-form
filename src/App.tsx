@@ -23,9 +23,9 @@ function App() {
 
   const form = useForm({
     // start example
-    alphaNumeric: [""],
+    alphaNumeric: ["123xYZ"],
     currency: ["123456789"],
-    tel: [""],
+    tel: ["0123456789"],
     // end example
     code: [
       "",
@@ -203,6 +203,7 @@ function App() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    console.log(form.get("gender"));
     form.validate();
     if (form.isValid) {
       console.log(form.value);
@@ -264,18 +265,28 @@ function App() {
       <Components.Card
         header="User Control"
         headerRight={() => (
-          <button
-            className="btn btn-primary btn-sm"
-            onClick={() => {
-              control.validate();
-              if (control.isValid) {
-                // save to backend
-                console.log(control.value);
-              }
-            }}
-          >
-            Submit
-          </button>
+          <div>
+            <button
+              className="btn btn-secondary btn-sm me-2"
+              onClick={() => {
+                control.reset();
+              }}
+            >
+              Reset
+            </button>
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => {
+                control.validate();
+                if (control.isValid) {
+                  // save to backend
+                  console.log(control.value);
+                }
+              }}
+            >
+              Submit
+            </button>
+          </div>
         )}
       >
         <Components.Form.Group label="NPWP" required={true}>
@@ -460,6 +471,15 @@ function App() {
           </div>
 
           <div className="d-flex justify-content-end">
+            <button
+              className="btn btn-secondary me-2"
+              type="button"
+              onClick={() => {
+                form.reset();
+              }}
+            >
+              Reset
+            </button>
             <button className="btn btn-primary">
               <i className="fa-solid fa-paper-plane"></i> Save
             </button>

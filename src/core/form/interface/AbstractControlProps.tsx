@@ -10,4 +10,5 @@ export interface AbstractControlProps {
   controls: ControlPropsType;
   parent?: FormParentProps;
   setParent: (parent: FormParentProps) => void;
+  reset: () => void;
 }

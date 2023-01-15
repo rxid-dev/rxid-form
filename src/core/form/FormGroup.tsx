@@ -122,6 +122,12 @@ export class FormGroup implements FormGroupProps {
     });
   }
 
+  public reset(): void {
+    Object.keys(this.controls).forEach((key: string) => {
+      this.get(key).reset();
+    });
+  }
+
   private reloadState(): void {
     if (!this.parent) return;
     this.parent.reloadState();
