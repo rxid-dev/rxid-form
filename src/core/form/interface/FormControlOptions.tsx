@@ -3,4 +3,6 @@ export interface FormControlOptionsProps {
   toDTO?: (value: any) => { [key: string]: any };
   // get value when user use patchValue and convert to input or component value
   toModel?: (model: any) => any;
+  // set form to disabled
+  disabled?: boolean;
 }

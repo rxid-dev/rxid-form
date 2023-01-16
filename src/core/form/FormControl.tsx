@@ -31,6 +31,7 @@ export class FormControl implements FormControlProps {
   public touched: boolean;
   public dirty: boolean;
   public isValid: boolean;
+  public disabled: boolean;
   constructor(
     public props: FormControlValueProps,
     public name: string,
@@ -41,6 +42,7 @@ export class FormControl implements FormControlProps {
     this.isValid = !this.errors;
     this.touched = false;
     this.dirty = false;
+    this.disabled = !!props[2]?.disabled;
   }
 
   // set value from module
@@ -85,6 +87,7 @@ export class FormControl implements FormControlProps {
         this.reloadState();
       },
       name: this.name,
+      disabled: this.disabled,
     };
   }
 
@@ -126,6 +129,16 @@ export class FormControl implements FormControlProps {
     this.props[1] = [];
     this.errors = null;
     this.isValid = true;
+    this.reloadState();
+  }
+
+  public disable(): void {
+    this.disabled = true;
+    this.reloadState();
+  }
+
+  public enable(): void {
+    this.disabled = false;
     this.reloadState();
   }
 

@@ -3,4 +3,5 @@ export interface FormControlNativeProps {
   onChange: (event: any) => void;
   onBlur: () => void;
   name: string;
+  disabled: boolean;
 }

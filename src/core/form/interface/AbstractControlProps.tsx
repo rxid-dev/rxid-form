@@ -14,4 +14,7 @@ export interface AbstractControlProps {
   reset: () => void;
   setValidators: (validators: ValidatorFn | Array<ValidatorFn>) => void;
   clearValidators: () => void;
+  disabled: boolean;
+  disable: () => void;
+  enable: () => void;
 }

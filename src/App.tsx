@@ -39,7 +39,7 @@ function App() {
     // start example
     validators: [""],
     validatorsInput: [""],
-    alphaNumeric: ["123xYZ"],
+    alphaNumeric: ["123xYZ", [], { disabled: true }],
     currency: ["123456789"],
     tel: ["0123456789"],
     // end example
@@ -137,6 +137,7 @@ function App() {
   ]);
 
   useEffect(() => {
+    form.disable();
     setTimeout(() => {
       const gender = JenisKelaminModel.createList()[0];
       const record = {
@@ -347,7 +348,29 @@ function App() {
         </Components.Form.Group>
       </Components.Card>
 
-      <Components.Card header="User Form">
+      <Components.Card
+        header="User Form"
+        headerRight={() => (
+          <div>
+            <button
+              className="btn btn-primary btn-sm me-2"
+              onClick={() => {
+                form.enable();
+              }}
+            >
+              Enable Form
+            </button>
+            <button
+              className="btn btn-warning btn-sm"
+              onClick={() => {
+                form.disable();
+              }}
+            >
+              Disabled Form
+            </button>
+          </div>
+        )}
+      >
         <form onSubmit={handleSubmit}>
           <Components.Form.Group label="Code" required={true}>
             <Components.Form.Input.Text

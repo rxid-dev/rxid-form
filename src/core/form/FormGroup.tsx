@@ -16,6 +16,7 @@ export interface FormGroupProps extends AbstractControlProps {
 
 export class FormGroup implements FormGroupProps {
   public parent?: FormParentProps;
+  public disabled: boolean;
   constructor(public controls: { [key: string]: FormControl | FormArray }) {}
   public patchValue(value: { [key: string]: any }) {
     Object.keys(value).forEach((key) => {
@@ -78,7 +79,9 @@ export class FormGroup implements FormGroupProps {
   public addControl(controlName: string, props: FormControlValueProps) {
     const controls = this.controls;
     if (controls[controlName]) return;
-    controls[controlName] = new FormControl(props, controlName, this.parent);
+    const control = new FormControl(props, controlName, this.parent);
+    this.disabled ? control.disable() : control.enable();
+    controls[controlName] = control;
     this.reloadState();
   }
 
@@ -138,6 +141,20 @@ export class FormGroup implements FormGroupProps {
   public clearValidators(): void {
     Object.keys(this.controls).forEach((key: string) => {
       this.get(key).clearValidators();
+    });
+  }
+
+  public disable(): void {
+    this.disabled = true;
+    Object.keys(this.controls).forEach((key: string) => {
+      this.get(key).disable();
+    });
+  }
+
+  public enable(): void {
+    this.disabled = false;
+    Object.keys(this.controls).forEach((key: string) => {
+      this.get(key).enable();
     });
   }
 

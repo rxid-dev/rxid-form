@@ -20,6 +20,7 @@ export class FormArray implements FormArrayProps {
   public nativeProps: FormControlNativeProps;
   public touched: boolean;
   public dirty: boolean;
+  public disabled: boolean;
   public setValue: (value: any) => void;
   constructor(public controls: FormGroup[]) {}
   public get value(): any {
@@ -58,6 +59,7 @@ export class FormArray implements FormArrayProps {
 
   public push(props: FormGroup): void {
     props.setParent(this.parent);
+    this.disabled ? props.disable() : props.enable();
     this.controls.push(props);
     this.reloadState();
   }
@@ -82,6 +84,20 @@ export class FormArray implements FormArrayProps {
   public clearValidators(): void {
     this.controls.forEach((formGroup: FormGroup) => {
       formGroup.clearValidators();
+    });
+  }
+
+  public disable(): void {
+    this.disabled = true;
+    this.controls.forEach((formGroup: FormGroup) => {
+      formGroup.disable();
+    });
+  }
+
+  public enable(): void {
+    this.disabled = false;
+    this.controls.forEach((formGroup: FormGroup) => {
+      formGroup.enable();
     });
   }
 
