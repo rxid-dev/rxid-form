@@ -17,6 +17,7 @@ export interface FormGroupProps extends AbstractControlProps {
 export class FormGroup implements FormGroupProps {
   public parent?: FormParentProps;
   public disabled: boolean;
+  public readonly: boolean;
   constructor(public controls: { [key: string]: FormControl | FormArray }) {}
   public patchValue(value: { [key: string]: any }) {
     Object.keys(value).forEach((key) => {
@@ -80,7 +81,8 @@ export class FormGroup implements FormGroupProps {
     const controls = this.controls;
     if (controls[controlName]) return;
     const control = new FormControl(props, controlName, this.parent);
-    this.disabled ? control.disable() : control.enable();
+    this.disabled && control.disable();
+    this.readonly && control.setReadOnly();
     controls[controlName] = control;
     this.reloadState();
   }
@@ -155,6 +157,13 @@ export class FormGroup implements FormGroupProps {
     this.disabled = false;
     Object.keys(this.controls).forEach((key: string) => {
       this.get(key).enable();
+    });
+  }
+
+  public setReadOnly(readOnly = true): void {
+    this.readonly = readOnly;
+    Object.keys(this.controls).forEach((key: string) => {
+      this.get(key).setReadOnly(readOnly);
     });
   }
 

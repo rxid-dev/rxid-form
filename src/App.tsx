@@ -39,7 +39,7 @@ function App() {
     // start example
     validators: [""],
     validatorsInput: [""],
-    alphaNumeric: ["123xYZ", [], { disabled: true }],
+    alphaNumeric: ["123xYZ"],
     currency: ["123456789"],
     tel: ["0123456789"],
     // end example
@@ -137,7 +137,8 @@ function App() {
   ]);
 
   useEffect(() => {
-    form.disable();
+    form.setReadOnly();
+    control.setReadOnly();
     setTimeout(() => {
       const gender = JenisKelaminModel.createList()[0];
       const record = {
@@ -273,7 +274,10 @@ function App() {
         })}
 
       <Components.Card header="Example Form">
-        <Components.Form.Group label="Validators Required" required={true}>
+        <Components.Form.Group
+          label="Validators Required"
+          required={!form.get("validators").readonly}
+        >
           <Components.Form.Radio
             control={form.get("validators") as FormControl}
             options={state.validatorsList}
@@ -291,21 +295,27 @@ function App() {
           />
         </Components.Form.Group>
 
-        <Components.Form.Group label="Alphanumeric" required={true}>
+        <Components.Form.Group
+          label="Alphanumeric"
+          required={!form.get("alphaNumeric").readonly}
+        >
           <Components.Form.Input.AlphaNumeric
             control={form.get("alphaNumeric") as FormControl}
             placeholder="Masukkan alphanumeric Anda"
           />
         </Components.Form.Group>
 
-        <Components.Form.Group label="Currency" required={true}>
+        <Components.Form.Group
+          label="Currency"
+          required={!form.get("currency").readonly}
+        >
           <Components.Form.Input.Currency
             control={form.get("currency") as FormControl}
             placeholder="Masukkan currency Anda"
           />
         </Components.Form.Group>
 
-        <Components.Form.Group label="Tel" required={true}>
+        <Components.Form.Group label="Tel" required={!form.get("tel").readonly}>
           <Components.Form.Input.Tel
             control={form.get("tel") as FormControl}
             placeholder="Masukkan nomor hp Anda"
@@ -340,7 +350,7 @@ function App() {
           </div>
         )}
       >
-        <Components.Form.Group label="NPWP" required={true}>
+        <Components.Form.Group label="NPWP" required={!control.readonly}>
           <Components.Form.Input.Numeric
             control={control}
             placeholder="Masukkan NPWP Anda"
@@ -355,66 +365,87 @@ function App() {
             <button
               className="btn btn-primary btn-sm me-2"
               onClick={() => {
-                form.enable();
+                form.setReadOnly();
               }}
             >
-              Enable Form
+              Read Only Form
             </button>
             <button
               className="btn btn-warning btn-sm"
               onClick={() => {
-                form.disable();
+                form.setReadOnly(false);
               }}
             >
-              Disabled Form
+              Write Form
             </button>
           </div>
         )}
       >
         <form onSubmit={handleSubmit}>
-          <Components.Form.Group label="Code" required={true}>
+          <Components.Form.Group
+            label="Code"
+            required={!form.get("code").readonly}
+          >
             <Components.Form.Input.Text
               control={form.get("code") as FormControl}
               placeholder="Masukkan code Anda"
             />
           </Components.Form.Group>
 
-          <Components.Form.Group label="Nama" required={true}>
+          <Components.Form.Group
+            label="Nama"
+            required={!form.get("name").readonly}
+          >
             <Components.Form.Input.Text
               control={form.get("name") as FormControl}
               placeholder="Masukkan nama Anda"
             />
           </Components.Form.Group>
 
-          <Components.Form.Group label="NIK" required={true}>
+          <Components.Form.Group
+            label="NIK"
+            required={!form.get("nik").readonly}
+          >
             <Components.Form.Input.Numeric
               control={form.get("nik") as FormControl}
               placeholder="Masukkan NIK Anda"
             />
           </Components.Form.Group>
 
-          <Components.Form.Group label="Email" required={true}>
+          <Components.Form.Group
+            label="Email"
+            required={!form.get("email").readonly}
+          >
             <Components.Form.Input.Email
               control={form.get("email") as FormControl}
               placeholder="Masukkan email Anda"
             />
           </Components.Form.Group>
 
-          <Components.Form.Group label="Tanggal Lahir" required={true}>
+          <Components.Form.Group
+            label="Tanggal Lahir"
+            required={!form.get("dob").readonly}
+          >
             <Components.Form.Input.Date
               control={form.get("dob") as FormControl}
               placeholder="Masukkan tanggal lahir Anda"
             />
           </Components.Form.Group>
 
-          <Components.Form.Group label="Usia" required={true}>
+          <Components.Form.Group
+            label="Usia"
+            required={!form.get("age").readonly}
+          >
             <Components.Form.Input.Number
               control={form.get("age") as FormControl}
               placeholder="Masukkan usia Anda"
             />
           </Components.Form.Group>
 
-          <Components.Form.Group label="Status Perkawinan" required={true}>
+          <Components.Form.Group
+            label="Status Perkawinan"
+            required={!form.get("maritalStatus").readonly}
+          >
             <Components.Form.Select
               placeholder="Pilih status perkawinan"
               options={state.statusPerkawinanList}
@@ -424,7 +455,10 @@ function App() {
           </Components.Form.Group>
 
           {form.get("no_akta_menikah") && (
-            <Components.Form.Group label="Nomor Akta Menikah" required={true}>
+            <Components.Form.Group
+              label="Nomor Akta Menikah"
+              required={!form.get("no_akta_menikah").readonly}
+            >
               <Components.Form.Input.Text
                 control={form.get("no_akta_menikah") as FormControl}
                 placeholder="Masukkan nomor akta menikah"
@@ -433,7 +467,10 @@ function App() {
           )}
 
           {form.get("no_akta_meninggal") && (
-            <Components.Form.Group label="Nomor Akta Meninggal" required={true}>
+            <Components.Form.Group
+              label="Nomor Akta Meninggal"
+              required={!form.get("no_akta_meninggal").readonly}
+            >
               <Components.Form.Input.Text
                 control={form.get("no_akta_meninggal") as FormControl}
                 placeholder="Masukkan nomor akta meninggal"
@@ -441,14 +478,20 @@ function App() {
             </Components.Form.Group>
           )}
 
-          <Components.Form.Group label="Jenis Kelamin" required={true}>
+          <Components.Form.Group
+            label="Jenis Kelamin"
+            required={!form.get("gender").readonly}
+          >
             <Components.Form.Radio
               control={form.get("gender") as FormControl}
               options={state.jenisKelaminList}
             />
           </Components.Form.Group>
 
-          <Components.Form.Group label="Hobi" required={true}>
+          <Components.Form.Group
+            label="Hobi"
+            required={!form.get("hobi").readonly}
+          >
             <Components.Form.CheckBox
               control={form.get("hobi") as FormControl}
               options={state.hobiList}
@@ -490,49 +533,70 @@ function App() {
                     </button>
                   )}
                 >
-                  <Components.Form.Group label="Street" required={true}>
+                  <Components.Form.Group
+                    label="Street"
+                    required={!formGroup.get("street").readonly}
+                  >
                     <Components.Form.TextArea
                       control={formGroup.get("street") as FormControl}
                       placeholder="Masukkan nama jalan"
                     />
                   </Components.Form.Group>
 
-                  <Components.Form.Group label="Desa" required={true}>
+                  <Components.Form.Group
+                    label="Desa"
+                    required={!formGroup.get("village").readonly}
+                  >
                     <Components.Form.Input.Text
                       control={formGroup.get("village") as FormControl}
                       placeholder="Masukkan nama desa"
                     />
                   </Components.Form.Group>
 
-                  <Components.Form.Group label="Kecamatan" required={true}>
+                  <Components.Form.Group
+                    label="Kecamatan"
+                    required={!formGroup.get("subDistrict").readonly}
+                  >
                     <Components.Form.Input.Text
                       control={formGroup.get("subDistrict") as FormControl}
                       placeholder="Masukkan nama kecamatan"
                     />
                   </Components.Form.Group>
 
-                  <Components.Form.Group label="Kabupaten" required={true}>
+                  <Components.Form.Group
+                    label="Kabupaten"
+                    required={!formGroup.get("district").readonly}
+                  >
                     <Components.Form.Input.Text
                       control={formGroup.get("district") as FormControl}
                       placeholder="Masukkan nama kabupaten"
                     />
                   </Components.Form.Group>
 
-                  <Components.Form.Group label="Provinsi" required={true}>
+                  <Components.Form.Group
+                    label="Provinsi"
+                    required={!formGroup.get("province").readonly}
+                  >
                     <Components.Form.Input.Text
                       control={formGroup.get("province") as FormControl}
                       placeholder="Masukkan nama provinsi"
                     />
                   </Components.Form.Group>
 
-                  <Components.Form.Group label="Negara" required={true}>
+                  <Components.Form.Group
+                    label="Negara"
+                    required={!formGroup.get("country").readonly}
+                  >
                     <Components.Form.Input.Text
                       control={formGroup.get("country") as FormControl}
                       placeholder="Masukkan nama negara"
                     />
                   </Components.Form.Group>
 
-                  <Components.Form.Group label="Kode POS" required={true}>
+                  <Components.Form.Group
+                    label="Kode POS"
+                    required={!formGroup.get("zipCode").readonly}
+                  >
                     <Components.Form.Input.Numeric
                       control={formGroup.get("zipCode") as FormControl}
                       placeholder="Masukkan kodepos"

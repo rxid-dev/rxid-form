@@ -21,6 +21,7 @@ export class FormArray implements FormArrayProps {
   public touched: boolean;
   public dirty: boolean;
   public disabled: boolean;
+  public readonly: boolean;
   public setValue: (value: any) => void;
   constructor(public controls: FormGroup[]) {}
   public get value(): any {
@@ -59,7 +60,8 @@ export class FormArray implements FormArrayProps {
 
   public push(props: FormGroup): void {
     props.setParent(this.parent);
-    this.disabled ? props.disable() : props.enable();
+    this.disabled && props.disable();
+    this.readonly && props.setReadOnly();
     this.controls.push(props);
     this.reloadState();
   }
@@ -98,6 +100,13 @@ export class FormArray implements FormArrayProps {
     this.disabled = false;
     this.controls.forEach((formGroup: FormGroup) => {
       formGroup.enable();
+    });
+  }
+
+  public setReadOnly(readOnly = true): void {
+    this.readonly = readOnly;
+    this.controls.forEach((formGroup: FormGroup) => {
+      formGroup.setReadOnly(readOnly);
     });
   }
 

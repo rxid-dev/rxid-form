@@ -5,4 +5,6 @@ export interface FormControlOptionsProps {
   toModel?: (model: any) => any;
   // set form to disabled
   disabled?: boolean;
+  // set form to readOnly
+  readonly?: boolean;
 }

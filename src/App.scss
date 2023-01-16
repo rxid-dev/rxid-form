@@ -9,6 +9,7 @@ div.card {
 }
 
 div.custom-form-group > label {
+  color: var(--bs-secondary);
   &.required {
     &::after {
       content: "*";

@@ -12,39 +12,45 @@ export const Radio: FunctionComponent<FormOptionsProps> = ({
 
   return (
     <>
-      {(options || []).map((option) => (
-        <div className="form-check" key={option.id}>
-          <input
-            className={
-              "form-check-input " +
-              (control.touched
-                ? control.isValid
-                  ? "is-valid"
-                  : "is-invalid"
-                : "")
-            }
-            type="radio"
-            id={"radio" + state.randomId + option.id}
-            {...control.nativeProps}
-            value={option.id}
-            checked={option.id === +control.value?.id}
-            onChange={() => {
-              control.setValue(option);
-              onChange && onChange(option);
-            }}
-          />
-          <label
-            className="form-check-label"
-            htmlFor={"radio" + state.randomId + option.id}
-          >
-            {option.name}
-          </label>
-        </div>
-      ))}
-      {control.touched && control.errors ? (
-        <small className="text-danger">{control.errors?.message}</small>
+      {control.readonly ? (
+        <p>{control.value?.name || "-"}</p>
       ) : (
-        <></>
+        <>
+          {(options || []).map((option) => (
+            <div className="form-check" key={option.id}>
+              <input
+                className={
+                  "form-check-input " +
+                  (control.touched
+                    ? control.isValid
+                      ? "is-valid"
+                      : "is-invalid"
+                    : "")
+                }
+                type="radio"
+                id={"radio" + state.randomId + option.id}
+                {...control.nativeProps}
+                value={option.id}
+                checked={option.id === +control.value?.id}
+                onChange={() => {
+                  control.setValue(option);
+                  onChange && onChange(option);
+                }}
+              />
+              <label
+                className="form-check-label"
+                htmlFor={"radio" + state.randomId + option.id}
+              >
+                {option.name}
+              </label>
+            </div>
+          ))}
+          {control.touched && control.errors ? (
+            <small className="text-danger">{control.errors?.message}</small>
+          ) : (
+            <></>
+          )}
+        </>
       )}
     </>
   );

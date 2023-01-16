@@ -22,6 +22,7 @@ interface FormControlProps extends AbstractControlProps {
   validate: () => void;
   nativeProps: FormControlNativeProps;
   setValue: (value: any) => void;
+  readonly: boolean;
 }
 
 export class FormControl implements FormControlProps {
@@ -32,6 +33,7 @@ export class FormControl implements FormControlProps {
   public dirty: boolean;
   public isValid: boolean;
   public disabled: boolean;
+  public readonly: boolean;
   constructor(
     public props: FormControlValueProps,
     public name: string,
@@ -43,6 +45,7 @@ export class FormControl implements FormControlProps {
     this.touched = false;
     this.dirty = false;
     this.disabled = !!props[2]?.disabled;
+    this.readonly = !!props[2]?.readonly;
   }
 
   // set value from module
@@ -139,6 +142,11 @@ export class FormControl implements FormControlProps {
 
   public enable(): void {
     this.disabled = false;
+    this.reloadState();
+  }
+
+  public setReadOnly(readOnly = true): void {
+    this.readonly = readOnly;
     this.reloadState();
   }
 
