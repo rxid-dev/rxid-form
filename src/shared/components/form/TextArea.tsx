@@ -5,6 +5,7 @@ export const TextArea: FunctionComponent<FormProps> = ({
   control,
   placeholder,
 }) => {
+  console.log("INFO: Come from TextArea");
   return (
     <>
       {control.readonly ? (

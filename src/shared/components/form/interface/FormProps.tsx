@@ -1,3 +1,4 @@
+import React from "react";
 import { FormControl } from "../../../../core/form";
 
 export interface FormProps {
@@ -5,4 +6,5 @@ export interface FormProps {
   control: FormControl;
   placeholder?: string;
   onChange?: (value: any) => void;
+  ref?: React.RefObject<any>;
 }

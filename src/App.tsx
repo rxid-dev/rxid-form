@@ -125,6 +125,7 @@ function App() {
       Validators.required("Syarat dan ketentuan wajib disetujui"),
     ],
     address: formBuilder.array(),
+    custom: ["", Validators.required("Custom wajib diisi")],
   });
 
   const control = useControl("npwp", [
@@ -137,8 +138,6 @@ function App() {
   ]);
 
   useEffect(() => {
-    form.setReadOnly();
-    control.setReadOnly();
     setTimeout(() => {
       const gender = JenisKelaminModel.createList()[0];
       const record = {
@@ -187,6 +186,7 @@ function App() {
         },
         termAndCondition: true,
         hobi: HobiModel.createList().slice(0, 2),
+        custom: "CustomValue",
       };
       onChangeMaritalStatus(record.maritalStatus);
       if (form.get("address").controls.length === 0) {
@@ -274,6 +274,29 @@ function App() {
         })}
 
       <Components.Card header="Example Form">
+        <button
+          className="btn btn-primary me-2"
+          onClick={() => {
+            const customControl = form.get("custom") as FormControl;
+            console.log("NewPROPS");
+            console.log((form.get("custom") as FormControl).props);
+          }}
+        >
+          Check Parent
+        </button>
+        <button className="btn btn-primary" onClick={handleSubmit}>
+          Submit
+        </button>
+        <Components.Form.Group
+          label="Custom Input"
+          required={!form.get("validators").readonly}
+        >
+          <Components.Form.Input.Custom
+            {...(form.get("custom") as FormControl).props}
+            placeholder="Masukkan custom value"
+          />
+        </Components.Form.Group>
+
         <Components.Form.Group
           label="Validators Required"
           required={!form.get("validators").readonly}

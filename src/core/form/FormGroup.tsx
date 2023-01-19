@@ -45,10 +45,10 @@ export class FormGroup implements FormGroupProps {
       const control: FormControl | FormArray = this.get(key);
       if (
         !(control instanceof FormArray) &&
-        control.props[2]?.toDTO &&
+        control.options?.toDTO &&
         control.value
       ) {
-        let dto = control.props[2]?.toDTO(control.value);
+        let dto = control.options?.toDTO(control.value);
         Object.keys(dto).forEach((dtoKey) => {
           value[dtoKey] = dto[dtoKey];
         });
@@ -105,10 +105,10 @@ export class FormGroup implements FormGroupProps {
       const control: FormControl | FormArray = this.get(key);
       if (
         !(control instanceof FormArray) &&
-        control.props[2]?.toDTO &&
+        control.options?.toDTO &&
         control.value
       ) {
-        let dto = control.props[2]?.toDTO(control.value);
+        let dto = control.options?.toDTO(control.value);
         Object.keys(dto).forEach((dtoKey) => {
           formData.append(dtoKey, dto[dtoKey]);
         });
