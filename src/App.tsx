@@ -287,6 +287,11 @@ function App() {
         <button className="btn btn-primary" onClick={handleSubmit}>
           Submit
         </button>
+        <br />
+        <br />
+        <Components.Example />
+        <br />
+        <br />
         <Components.Form.Group
           label="Custom Input"
           required={!form.get("validators").readonly}
@@ -302,7 +307,7 @@ function App() {
           required={!form.get("validators").readonly}
         >
           <Components.Form.Radio
-            control={form.get("validators") as FormControl}
+            {...(form.get("validators") as FormControl).props}
             options={state.validatorsList}
             onChange={handleChangeValidators}
           />
@@ -313,7 +318,7 @@ function App() {
           required={form.get("validators").value?.id === 2}
         >
           <Components.Form.Input.Text
-            control={form.get("validatorsInput") as FormControl}
+            {...(form.get("validatorsInput") as FormControl).props}
             placeholder="Masukkan beberapa karakter untuk divalidasi"
           />
         </Components.Form.Group>
@@ -323,7 +328,7 @@ function App() {
           required={!form.get("alphaNumeric").readonly}
         >
           <Components.Form.Input.AlphaNumeric
-            control={form.get("alphaNumeric") as FormControl}
+            {...(form.get("alphaNumeric") as FormControl).props}
             placeholder="Masukkan alphanumeric Anda"
           />
         </Components.Form.Group>
@@ -333,14 +338,14 @@ function App() {
           required={!form.get("currency").readonly}
         >
           <Components.Form.Input.Currency
-            control={form.get("currency") as FormControl}
+            {...(form.get("currency") as FormControl).props}
             placeholder="Masukkan currency Anda"
           />
         </Components.Form.Group>
 
         <Components.Form.Group label="Tel" required={!form.get("tel").readonly}>
           <Components.Form.Input.Tel
-            control={form.get("tel") as FormControl}
+            {...(form.get("tel") as FormControl).props}
             placeholder="Masukkan nomor hp Anda"
           />
         </Components.Form.Group>
@@ -375,7 +380,7 @@ function App() {
       >
         <Components.Form.Group label="NPWP" required={!control.readonly}>
           <Components.Form.Input.Numeric
-            control={control}
+            {...control.props}
             placeholder="Masukkan NPWP Anda"
           />
         </Components.Form.Group>
@@ -410,7 +415,7 @@ function App() {
             required={!form.get("code").readonly}
           >
             <Components.Form.Input.Text
-              control={form.get("code") as FormControl}
+              {...(form.get("code") as FormControl).props}
               placeholder="Masukkan code Anda"
             />
           </Components.Form.Group>
@@ -420,7 +425,7 @@ function App() {
             required={!form.get("name").readonly}
           >
             <Components.Form.Input.Text
-              control={form.get("name") as FormControl}
+              {...(form.get("name") as FormControl).props}
               placeholder="Masukkan nama Anda"
             />
           </Components.Form.Group>
@@ -430,7 +435,7 @@ function App() {
             required={!form.get("nik").readonly}
           >
             <Components.Form.Input.Numeric
-              control={form.get("nik") as FormControl}
+              {...(form.get("nik") as FormControl).props}
               placeholder="Masukkan NIK Anda"
             />
           </Components.Form.Group>
@@ -440,7 +445,7 @@ function App() {
             required={!form.get("email").readonly}
           >
             <Components.Form.Input.Email
-              control={form.get("email") as FormControl}
+              {...(form.get("email") as FormControl).props}
               placeholder="Masukkan email Anda"
             />
           </Components.Form.Group>
@@ -450,7 +455,7 @@ function App() {
             required={!form.get("dob").readonly}
           >
             <Components.Form.Input.Date
-              control={form.get("dob") as FormControl}
+              {...(form.get("dob") as FormControl).props}
               placeholder="Masukkan tanggal lahir Anda"
             />
           </Components.Form.Group>
@@ -460,7 +465,7 @@ function App() {
             required={!form.get("age").readonly}
           >
             <Components.Form.Input.Number
-              control={form.get("age") as FormControl}
+              {...(form.get("age") as FormControl).props}
               placeholder="Masukkan usia Anda"
             />
           </Components.Form.Group>
@@ -472,7 +477,7 @@ function App() {
             <Components.Form.Select
               placeholder="Pilih status perkawinan"
               options={state.statusPerkawinanList}
-              control={form.get("maritalStatus") as FormControl}
+              {...(form.get("maritalStatus") as FormControl).props}
               onChange={onChangeMaritalStatus}
             />
           </Components.Form.Group>
@@ -483,7 +488,7 @@ function App() {
               required={!form.get("no_akta_menikah").readonly}
             >
               <Components.Form.Input.Text
-                control={form.get("no_akta_menikah") as FormControl}
+                {...(form.get("no_akta_menikah") as FormControl).props}
                 placeholder="Masukkan nomor akta menikah"
               />
             </Components.Form.Group>
@@ -495,7 +500,7 @@ function App() {
               required={!form.get("no_akta_meninggal").readonly}
             >
               <Components.Form.Input.Text
-                control={form.get("no_akta_meninggal") as FormControl}
+                {...(form.get("no_akta_meninggal") as FormControl).props}
                 placeholder="Masukkan nomor akta meninggal"
               />
             </Components.Form.Group>
@@ -506,7 +511,7 @@ function App() {
             required={!form.get("gender").readonly}
           >
             <Components.Form.Radio
-              control={form.get("gender") as FormControl}
+              {...(form.get("gender") as FormControl).props}
               options={state.jenisKelaminList}
             />
           </Components.Form.Group>
@@ -516,14 +521,14 @@ function App() {
             required={!form.get("hobi").readonly}
           >
             <Components.Form.CheckBox
-              control={form.get("hobi") as FormControl}
+              {...(form.get("hobi") as FormControl).props}
               options={state.hobiList}
             />
           </Components.Form.Group>
 
           <Components.Form.Group>
             <Components.Form.CheckBox
-              control={form.get("termAndCondition") as FormControl}
+              {...(form.get("termAndCondition") as FormControl).props}
               placeholder="Term and condition"
             />
           </Components.Form.Group>
@@ -561,7 +566,7 @@ function App() {
                     required={!formGroup.get("street").readonly}
                   >
                     <Components.Form.TextArea
-                      control={formGroup.get("street") as FormControl}
+                      {...(formGroup.get("street") as FormControl).props}
                       placeholder="Masukkan nama jalan"
                     />
                   </Components.Form.Group>
@@ -571,7 +576,7 @@ function App() {
                     required={!formGroup.get("village").readonly}
                   >
                     <Components.Form.Input.Text
-                      control={formGroup.get("village") as FormControl}
+                      {...(formGroup.get("village") as FormControl).props}
                       placeholder="Masukkan nama desa"
                     />
                   </Components.Form.Group>
@@ -581,7 +586,7 @@ function App() {
                     required={!formGroup.get("subDistrict").readonly}
                   >
                     <Components.Form.Input.Text
-                      control={formGroup.get("subDistrict") as FormControl}
+                      {...(formGroup.get("subDistrict") as FormControl).props}
                       placeholder="Masukkan nama kecamatan"
                     />
                   </Components.Form.Group>
@@ -591,7 +596,7 @@ function App() {
                     required={!formGroup.get("district").readonly}
                   >
                     <Components.Form.Input.Text
-                      control={formGroup.get("district") as FormControl}
+                      {...(formGroup.get("district") as FormControl).props}
                       placeholder="Masukkan nama kabupaten"
                     />
                   </Components.Form.Group>
@@ -601,7 +606,7 @@ function App() {
                     required={!formGroup.get("province").readonly}
                   >
                     <Components.Form.Input.Text
-                      control={formGroup.get("province") as FormControl}
+                      {...(formGroup.get("province") as FormControl).props}
                       placeholder="Masukkan nama provinsi"
                     />
                   </Components.Form.Group>
@@ -611,7 +616,7 @@ function App() {
                     required={!formGroup.get("country").readonly}
                   >
                     <Components.Form.Input.Text
-                      control={formGroup.get("country") as FormControl}
+                      {...(formGroup.get("country") as FormControl).props}
                       placeholder="Masukkan nama negara"
                     />
                   </Components.Form.Group>
@@ -621,7 +626,7 @@ function App() {
                     required={!formGroup.get("zipCode").readonly}
                   >
                     <Components.Form.Input.Numeric
-                      control={formGroup.get("zipCode") as FormControl}
+                      {...(formGroup.get("zipCode") as FormControl).props}
                       placeholder="Masukkan kodepos"
                     />
                   </Components.Form.Group>

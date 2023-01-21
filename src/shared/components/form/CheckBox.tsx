@@ -1,11 +1,25 @@
-import { FunctionComponent, useState } from "react";
-import { FormOptionsProps } from "./interface/FormOptionsProps";
+import React, {
+  ForwardRefRenderFunction,
+  useImperativeHandle,
+  useState,
+} from "react";
+import { FormControl } from "../../../core/form";
+import { FormControlProps } from "../../../core/form/interface/FormControlProps";
+import { useControl } from "../../../core/form/useControl";
 
-export const CheckBox: FunctionComponent<FormOptionsProps> = ({
-  control,
-  options,
-  placeholder,
-}) => {
+interface Props extends FormControlProps {
+  options?: Array<any>;
+  onChange?: (value: any) => void;
+  placeholder?: string;
+}
+
+const CheckBoxComponent: ForwardRefRenderFunction<
+  FormControl | undefined,
+  Props
+> = (props, ref) => {
+  const control = useControl(props.name, props.props);
+  useImperativeHandle(ref, () => control);
+
   const [state] = useState({
     randomId: Math.ceil(Math.random() * 100),
   });
@@ -14,7 +28,7 @@ export const CheckBox: FunctionComponent<FormOptionsProps> = ({
     <>
       {control.readonly ? (
         <div>
-          {placeholder ? (
+          {props.placeholder ? (
             control.value || "-"
           ) : (
             <ul className="p-0" style={{ listStylePosition: "inside" }}>
@@ -26,7 +40,7 @@ export const CheckBox: FunctionComponent<FormOptionsProps> = ({
         </div>
       ) : (
         <>
-          {placeholder ? (
+          {props.placeholder ? (
             <>
               <div className="form-check">
                 <input
@@ -51,12 +65,12 @@ export const CheckBox: FunctionComponent<FormOptionsProps> = ({
                   className="form-check-label"
                   htmlFor={"checkbox" + state.randomId}
                 >
-                  {placeholder}
+                  {props.placeholder}
                 </label>
               </div>
             </>
           ) : (
-            (options || []).map((option) => (
+            (props.options || []).map((option) => (
               <div className="form-check" key={option.id}>
                 <input
                   className={
@@ -111,3 +125,5 @@ export const CheckBox: FunctionComponent<FormOptionsProps> = ({
     </>
   );
 };
+
+export const CheckBox = React.forwardRef(CheckBoxComponent);

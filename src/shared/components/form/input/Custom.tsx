@@ -14,7 +14,7 @@ const CustomInputComponent: ForwardRefRenderFunction<
 > = (props, ref) => {
   const control = useControl(props.name, props.props);
   useImperativeHandle(ref, () => control);
-  return <InputText {...props} control={control} />;
+  return <InputText {...props} {...control.props} />;
 };
 
 export const CustomInput = React.forwardRef(CustomInputComponent);

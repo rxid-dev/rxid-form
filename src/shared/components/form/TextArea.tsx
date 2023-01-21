@@ -1,11 +1,17 @@
-import { FunctionComponent } from "react";
-import { FormProps } from "./interface/FormProps";
+import React, { ForwardRefRenderFunction, useImperativeHandle } from "react";
+import { FormControl } from "../../../core/form";
+import { FormControlProps } from "../../../core/form/interface/FormControlProps";
+import { useControl } from "../../../core/form/useControl";
+interface Props extends FormControlProps {
+  placeholder?: string;
+}
 
-export const TextArea: FunctionComponent<FormProps> = ({
-  control,
-  placeholder,
-}) => {
-  console.log("INFO: Come from TextArea");
+const TextAreaComponent: ForwardRefRenderFunction<
+  FormControl | undefined,
+  Props
+> = (props, ref) => {
+  const control = useControl(props.name, props.props);
+  useImperativeHandle(ref, () => control);
   return (
     <>
       {control.readonly ? (
@@ -21,7 +27,7 @@ export const TextArea: FunctionComponent<FormProps> = ({
                   : "is-invalid"
                 : "")
             }
-            placeholder={placeholder}
+            placeholder={props.placeholder}
             {...control.nativeProps}
           />
           {control.touched && control.errors ? (
@@ -34,3 +40,5 @@ export const TextArea: FunctionComponent<FormProps> = ({
     </>
   );
 };
+
+export const TextArea = React.forwardRef(TextAreaComponent);

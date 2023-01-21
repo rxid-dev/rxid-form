@@ -1,12 +1,21 @@
-import { FunctionComponent } from "react";
-import { FormOptionsProps } from "./interface/FormOptionsProps";
+import React, { ForwardRefRenderFunction, useImperativeHandle } from "react";
+import { FormControl } from "../../../core/form";
+import { FormControlProps } from "../../../core/form/interface/FormControlProps";
+import { useControl } from "../../../core/form/useControl";
 
-export const Select: FunctionComponent<FormOptionsProps> = ({
-  control,
-  placeholder,
-  options,
-  onChange,
-}) => {
+interface Props extends FormControlProps {
+  options?: Array<any>;
+  onChange?: (value: any) => void;
+  placeholder?: string;
+}
+
+const SelectComponent: ForwardRefRenderFunction<
+  FormControl | undefined,
+  Props
+> = (props, ref) => {
+  const control = useControl(props.name, props.props);
+  useImperativeHandle(ref, () => control);
+
   return (
     <>
       {control.readonly ? (
@@ -26,18 +35,18 @@ export const Select: FunctionComponent<FormOptionsProps> = ({
             onChange={(e) => {
               let value: any = e.target.value;
               if (value) {
-                const indexOfOption = (options || []).findIndex(
+                const indexOfOption = (props.options || []).findIndex(
                   (option) => option.id === +e.target.value
                 );
-                value = (options || [])[indexOfOption];
+                value = (props.options || [])[indexOfOption];
               }
               control.setValue(value);
-              onChange && onChange(value);
+              props.onChange && props.onChange(value);
             }}
             value={control.value?.id}
           >
-            <option value="">{placeholder}</option>
-            {(options || []).map((option) => (
+            <option value="">{props.placeholder}</option>
+            {(props.options || []).map((option) => (
               <option value={option.id} key={option.id}>
                 {option.name}
               </option>
@@ -53,3 +62,5 @@ export const Select: FunctionComponent<FormOptionsProps> = ({
     </>
   );
 };
+
+export const Select = React.forwardRef(SelectComponent);

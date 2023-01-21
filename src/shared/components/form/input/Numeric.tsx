@@ -1,11 +1,25 @@
-import { FunctionComponent } from "react";
-import { FormProps } from "../interface/FormProps";
+import React, { ForwardRefRenderFunction, useImperativeHandle } from "react";
+import { FormControl } from "../../../../core/form";
+import { FormControlProps } from "../../../../core/form/interface/FormControlProps";
+import { useControl } from "../../../../core/form/useControl";
 import { InputText } from "./Text";
 
-export const InputNumeric: FunctionComponent<FormProps> = (props) => {
+interface Props extends FormControlProps {
+  placeholder?: string;
+}
+
+const InputNumericComponent: ForwardRefRenderFunction<
+  FormControl | undefined,
+  Props
+> = (props, ref) => {
+  const control = useControl(props.name, props.props);
+  useImperativeHandle(ref, () => control);
+
   const onChange = (value: any): void => {
-    props.control.setValue(value.replace(/\D/g, ""));
+    control.setValue(value.replace(/\D/g, ""));
   };
 
-  return <InputText {...props} onChange={onChange} />;
+  return <InputText {...props} {...control.props} onChange={onChange} />;
 };
+
+export const InputNumeric = React.forwardRef(InputNumericComponent);

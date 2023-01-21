@@ -72,6 +72,7 @@ export class FormControl implements Props {
 
   // set value from module
   public patchValue(value: any): void {
+    this._props[0] = value;
     if (this.ref.current) {
       this.ref.current.patchValue(value);
     } else {

@@ -1,9 +1,20 @@
-import { FunctionComponent } from "react";
-import { FormProps } from "../interface/FormProps";
+import React, { ForwardRefRenderFunction, useImperativeHandle } from "react";
+import { FormControl } from "../../../../core/form";
+import { FormControlProps } from "../../../../core/form/interface/FormControlProps";
+import { useControl } from "../../../../core/form/useControl";
 import { InputText } from "./Text";
 
-interface Props extends FormProps {}
+interface Props extends FormControlProps {
+  placeholder?: string;
+}
+const InputDateComponent: ForwardRefRenderFunction<
+  FormControl | undefined,
+  Props
+> = (props, ref) => {
+  const control = useControl(props.name, props.props);
+  useImperativeHandle(ref, () => control);
 
-export const InputDate: FunctionComponent<Props> = (props) => {
-  return <InputText {...props} type="date" />;
+  return <InputText {...props} {...control.props} type="date" />;
 };
+
+export const InputDate = React.forwardRef(InputDateComponent);

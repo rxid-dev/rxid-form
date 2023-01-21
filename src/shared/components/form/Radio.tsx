@@ -1,11 +1,24 @@
-import { FunctionComponent, useState } from "react";
-import { FormOptionsProps } from "./interface/FormOptionsProps";
+import React, {
+  ForwardRefRenderFunction,
+  useImperativeHandle,
+  useState,
+} from "react";
+import { FormControl } from "../../../core/form";
+import { FormControlProps } from "../../../core/form/interface/FormControlProps";
+import { useControl } from "../../../core/form/useControl";
 
-export const Radio: FunctionComponent<FormOptionsProps> = ({
-  control,
-  options,
-  onChange,
-}) => {
+interface Props extends FormControlProps {
+  options?: Array<any>;
+  onChange?: (value: any) => void;
+}
+
+const RadioComponent: ForwardRefRenderFunction<
+  FormControl | undefined,
+  Props
+> = (props, ref) => {
+  const control = useControl(props.name, props.props);
+  useImperativeHandle(ref, () => control);
+
   const [state] = useState({
     randomId: Math.ceil(Math.random() * 100),
   });
@@ -16,7 +29,7 @@ export const Radio: FunctionComponent<FormOptionsProps> = ({
         <p>{control.value?.name || "-"}</p>
       ) : (
         <>
-          {(options || []).map((option) => (
+          {(props.options || []).map((option) => (
             <div className="form-check" key={option.id}>
               <input
                 className={
@@ -34,7 +47,7 @@ export const Radio: FunctionComponent<FormOptionsProps> = ({
                 checked={option.id === +control.value?.id}
                 onChange={() => {
                   control.setValue(option);
-                  onChange && onChange(option);
+                  props.onChange && props.onChange(option);
                 }}
               />
               <label
@@ -55,3 +68,5 @@ export const Radio: FunctionComponent<FormOptionsProps> = ({
     </>
   );
 };
+
+export const Radio = React.forwardRef(RadioComponent);
