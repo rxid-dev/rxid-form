@@ -11,7 +11,7 @@ interface Props extends FormControlProps {
 const InputNumberComponent: ForwardRefRenderFunction<
   FormControl | undefined,
   Props
-> = (props, ref) => {
+> = ({ placeholder, ...props }, ref) => {
   const control = useControl(props.name, props.props);
   useImperativeHandle(ref, () => control);
 
@@ -21,8 +21,8 @@ const InputNumberComponent: ForwardRefRenderFunction<
 
   return (
     <InputText
-      {...props}
-      {...control.props}
+      placeholder={placeholder}
+      control={control}
       type="number"
       onChange={onChange}
     />

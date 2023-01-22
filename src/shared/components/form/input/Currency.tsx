@@ -10,7 +10,7 @@ interface Props extends FormControlProps {
 const InputCurrencyComponent: ForwardRefRenderFunction<
   FormControl | undefined,
   Props
-> = (props, ref) => {
+> = ({ placeholder, ...props }, ref) => {
   const control = useControl(props.name, props.props);
   useImperativeHandle(ref, () => control);
 
@@ -20,10 +20,10 @@ const InputCurrencyComponent: ForwardRefRenderFunction<
 
   return (
     <InputText
-      placeholder={props.placeholder}
-      onChange={onChange}
+      placeholder={placeholder}
       value={control.value ? (+control.value).toLocaleString() : ""}
-      {...control.props}
+      control={control}
+      onChange={onChange}
       componentLeft={() => <>Rp</>}
     />
   );

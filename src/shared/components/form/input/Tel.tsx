@@ -11,11 +11,22 @@ interface Props extends FormControlProps {
 const InputTelComponent: ForwardRefRenderFunction<
   FormControl | undefined,
   Props
-> = (props, ref) => {
+> = ({ placeholder, ...props }, ref) => {
   const control = useControl(props.name, props.props);
   useImperativeHandle(ref, () => control);
 
-  return <InputText {...control.props} componentLeft={() => <>+62</>} />;
+  const onChange = (value: any): void => {
+    control.setValue(value.replace(/\D/g, ""));
+  };
+
+  return (
+    <InputText
+      placeholder={placeholder}
+      control={control}
+      onChange={onChange}
+      componentLeft={() => <>+62</>}
+    />
+  );
 };
 
 export const InputTel = React.forwardRef(InputTelComponent);

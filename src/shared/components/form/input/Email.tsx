@@ -10,7 +10,7 @@ interface Props extends FormControlProps {
 const InputEmailComponent: ForwardRefRenderFunction<
   FormControl | undefined,
   Props
-> = (props, ref) => {
+> = ({ placeholder, ...props }, ref) => {
   const control = useControl(props.name, props.props);
   useImperativeHandle(ref, () => control);
 
@@ -20,8 +20,8 @@ const InputEmailComponent: ForwardRefRenderFunction<
 
   return (
     <InputText
-      {...props}
-      {...control.props}
+      placeholder={placeholder}
+      control={control}
       type="email"
       onChange={onChange}
       componentLeft={() => <em className="fas fa-envelope" />}

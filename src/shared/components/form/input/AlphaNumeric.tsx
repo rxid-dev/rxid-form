@@ -10,7 +10,7 @@ interface Props extends FormControlProps {
 const InputAlphaNumericComponent: ForwardRefRenderFunction<
   FormControl | undefined,
   Props
-> = (props, ref) => {
+> = ({ placeholder, ...props }, ref) => {
   const control = useControl(props.name, props.props);
   useImperativeHandle(ref, () => control);
 
@@ -18,7 +18,13 @@ const InputAlphaNumericComponent: ForwardRefRenderFunction<
     control.setValue(value.replace(/\W/g, ""));
   };
 
-  return <InputText {...props} control={control} onChange={onChange} />;
+  return (
+    <InputText
+      placeholder={placeholder}
+      control={control}
+      onChange={onChange}
+    />
+  );
 };
 
 export const InputAlphaNumeric = React.forwardRef(InputAlphaNumericComponent);

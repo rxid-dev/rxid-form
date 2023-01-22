@@ -1,4 +1,8 @@
-import React, { ForwardRefRenderFunction, useImperativeHandle } from "react";
+import React, {
+  ForwardRefRenderFunction,
+  FunctionComponent,
+  useImperativeHandle,
+} from "react";
 import { FormControl, FormControlValueProps } from "../../../../core/form";
 import { useControl } from "../../../../core/form/useControl";
 import { FormProps } from "../interface/FormProps";
@@ -14,6 +18,17 @@ const InputTextComponent: ForwardRefRenderFunction<
   FormControl | undefined,
   Props
 > = (props, ref) => {
+  return props.name && props.props ? (
+    <InputWithProps {...props} ref={ref} />
+  ) : (
+    <InputWithControl {...props} />
+  );
+};
+
+const InputWithPropsComponent: ForwardRefRenderFunction<
+  FormControl | undefined,
+  Props
+> = (props, ref) => {
   let control: FormControl = useControl(
     props.name as string,
     props.props as FormControlValueProps
@@ -21,10 +36,16 @@ const InputTextComponent: ForwardRefRenderFunction<
 
   useImperativeHandle(ref, () => control);
 
+  return <InputWithControl {...props} control={control} />;
+};
+
+const InputWithProps = React.forwardRef(InputWithPropsComponent);
+
+const InputWithControl: FunctionComponent<Props> = ({ control, ...props }) => {
   const onChange = (event: any) => {
     if (props.onChange) {
       props.onChange(event.target.value);
-    } else {
+    } else if (control) {
       control.nativeProps.onChange(event);
     }
   };

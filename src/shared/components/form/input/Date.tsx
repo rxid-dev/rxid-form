@@ -10,11 +10,11 @@ interface Props extends FormControlProps {
 const InputDateComponent: ForwardRefRenderFunction<
   FormControl | undefined,
   Props
-> = (props, ref) => {
+> = ({ placeholder, ...props }, ref) => {
   const control = useControl(props.name, props.props);
   useImperativeHandle(ref, () => control);
 
-  return <InputText {...props} {...control.props} type="date" />;
+  return <InputText placeholder={placeholder} {...control.props} type="date" />;
 };
 
 export const InputDate = React.forwardRef(InputDateComponent);

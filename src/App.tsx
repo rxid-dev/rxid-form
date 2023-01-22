@@ -40,8 +40,8 @@ function App() {
     validators: [""],
     validatorsInput: [""],
     alphaNumeric: ["123xYZ"],
-    currency: ["123456789"],
-    tel: ["0123456789"],
+    currency: ["123456789", Validators.required("Currency wajib diisi")],
+    tel: ["0123456789", Validators.required("Tel wajib diisi")],
     // end example
     code: [
       "",
@@ -267,18 +267,10 @@ function App() {
     <div className="container py-4">
       <h1 className="mb-0">React Form</h1>
       <p>Learn how to use form in react</p>
-      {Array(0)
-        .fill(0)
-        .map((val, index) => {
-          return <Components.CustomComponent key={val + index + 1} />;
-        })}
-
       <Components.Card header="Example Form">
         <button
           className="btn btn-primary me-2"
           onClick={() => {
-            const customControl = form.get("custom") as FormControl;
-            console.log("NewPROPS");
             console.log((form.get("custom") as FormControl).props);
           }}
         >
