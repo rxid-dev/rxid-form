@@ -24,6 +24,7 @@ interface Props extends AbstractControlProps {
   nativeProps: FormControlNativeProps;
   setValue: (value: any) => void;
   readonly: boolean;
+  setErrors: (errors: ValidationError) => void;
 }
 
 export class FormControl implements Props {
@@ -157,6 +158,7 @@ export class FormControl implements Props {
     if (this.ref.current) {
       this.ref.current.validate();
     } else {
+      if (this.errors) return;
       this.markAsTouched();
       this.errors = this.createErrors(this.value);
       this.isValid = !this.errors;
@@ -219,6 +221,16 @@ export class FormControl implements Props {
       this.ref.current.setReadOnly(readOnly);
     } else {
       this.readonly = readOnly;
+      this.reloadState();
+    }
+  }
+
+  public setErrors(errors: ValidationError): void {
+    if (this.ref.current) {
+      this.ref.current?.setErrors(errors);
+    } else {
+      this.errors = errors;
+      this.isValid = false;
       this.reloadState();
     }
   }

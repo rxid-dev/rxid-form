@@ -236,6 +236,13 @@ function App() {
     form.validate();
     if (form.isValid) {
       console.log(form.value);
+      setTimeout(() => {
+        const errors = "Email address already exists";
+        const emailControl = form.get("email") as FormControl;
+        emailControl.setErrors({
+          message: errors,
+        });
+      }, 5000);
     }
   };
 
