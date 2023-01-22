@@ -19,4 +19,5 @@ export interface AbstractControlProps {
   enable: () => void;
   readonly: boolean;
   setReadOnly: (readOnly?: boolean) => void;
+  validate: () => void;
 }

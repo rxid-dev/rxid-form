@@ -110,8 +110,14 @@ export class FormArray implements FormArrayProps {
     });
   }
 
+  public validate(): void {
+    this.controls.forEach((formGroup: FormGroup) => {
+      formGroup.validate();
+    });
+  }
+
   private reloadState(): void {
-    if (!this.parent) return;
+    if (!this.parent?.reloadState) return;
     this.parent.reloadState();
   }
 }

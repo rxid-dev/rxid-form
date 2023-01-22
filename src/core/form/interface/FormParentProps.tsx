@@ -1,3 +1,5 @@
+import { FormGroup } from "../FormGroup";
 export interface FormParentProps {
-  reloadState: () => void;
+  reloadState?: () => void;
+  parent?: FormGroup;
 }

@@ -21,7 +21,6 @@ interface Props extends AbstractControlProps {
   dirty: boolean;
   markAsDirty: () => void;
   markAsTouched: () => void;
-  validate: () => void;
   nativeProps: FormControlNativeProps;
   setValue: (value: any) => void;
   readonly: boolean;
@@ -118,6 +117,7 @@ export class FormControl implements Props {
       name: this.name,
       props: this._props,
       ref: this.ref,
+      parent: this.parent?.parent,
     };
   }
 
@@ -144,7 +144,7 @@ export class FormControl implements Props {
       : [this._props[1]];
     return (
       validators
-        .map((validator) => validator(value))
+        .map((validator) => validator(value, this.parent?.parent))
         .filter((error) => error)[0] || null
     );
   }
@@ -158,6 +158,8 @@ export class FormControl implements Props {
       this.ref.current.validate();
     } else {
       this.markAsTouched();
+      this.errors = this.createErrors(this.value);
+      this.isValid = !this.errors;
       this.reloadState();
     }
   }
@@ -222,7 +224,7 @@ export class FormControl implements Props {
   }
 
   private reloadState(): void {
-    if (!this.parent) return;
+    if (!this.parent?.reloadState) return;
     this.parent.reloadState();
   }
 }

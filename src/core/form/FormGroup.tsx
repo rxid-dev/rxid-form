@@ -8,7 +8,6 @@ import { ValidatorFn } from "./type/ValidationFN";
 export interface FormGroupProps extends AbstractControlProps {
   addControl: (controlName: string, props: FormControlValueProps) => void;
   removeControl: (controlName: string) => void;
-  validate: () => void;
   getFormData: () => FormData;
   setControls: (controls: { [key: string]: FormControl }) => void;
   get: (controlName: string) => FormControl | FormArray;
@@ -95,8 +94,9 @@ export class FormGroup implements FormGroupProps {
   }
 
   public validate(): void {
-    this.markAllAsTouched();
-    this.reloadState();
+    Object.keys(this.controls).forEach((key: string) => {
+      this.get(key).validate();
+    });
   }
 
   public getFormData(): FormData {
@@ -168,7 +168,7 @@ export class FormGroup implements FormGroupProps {
   }
 
   private reloadState(): void {
-    if (!this.parent) return;
+    if (!this.parent?.reloadState) return;
     this.parent.reloadState();
   }
 }

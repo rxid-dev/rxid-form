@@ -1,5 +1,6 @@
 import { actualLengthValidator } from "./actualLength.validator";
 import { emailValidator } from "./email.validator";
+import { matchValidator } from "./match.validator";
 import { maxValidator } from "./max.validator";
 import { maxLengthValidator } from "./maxLength.validator";
 import { minValidator } from "./min.validator";
@@ -17,4 +18,5 @@ export const Validators = {
   number: numberValidator,
   regex: regexValidator,
   email: emailValidator,
+  match: matchValidator,
 };

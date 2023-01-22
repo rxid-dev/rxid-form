@@ -10,7 +10,15 @@ interface FormControlProps {
 export const formBuilder = {
   group: (props: FormControlProps, parent?: FormParentProps): FormGroup => {
     const formGroup = new FormGroup({});
-    parent && formGroup.setParent(parent);
+    if (!parent) {
+      parent = {
+        parent: formGroup,
+      };
+    } else {
+      parent.parent = formGroup;
+    }
+
+    formGroup.setParent(parent);
     const controls: { [key: string]: FormControl | FormArray } = {};
     Object.keys(props).forEach((key: string) => {
       const prop: FormControlValueProps | FormArray = props[key];

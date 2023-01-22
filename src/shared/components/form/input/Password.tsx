@@ -16,7 +16,7 @@ const InputPasswordComponent: ForwardRefRenderFunction<
   Props
 > = ({ placeholder, ...props }, ref) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const control = useControl(props.name, props.props);
+  const control = useControl(props.name, props.props, props.parent);
   useImperativeHandle(ref, () => control);
 
   const onChange = (value: string): void => {

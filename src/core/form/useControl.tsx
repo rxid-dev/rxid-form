@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { FormControl, FormControlValueProps } from "./FormControl";
+import { FormGroup } from "./FormGroup";
 
 export const useControl = (
   controlName: string,
-  props: FormControlValueProps
+  props: FormControlValueProps,
+  parent?: FormGroup
 ): FormControl => {
   const reloadState = () => {
     setState((state) => ({
@@ -13,7 +15,7 @@ export const useControl = (
   };
 
   const [state, setState] = useState({
-    control: new FormControl(props, controlName, { reloadState }),
+    control: new FormControl(props, controlName, { reloadState, parent }),
   });
 
   return state.control;

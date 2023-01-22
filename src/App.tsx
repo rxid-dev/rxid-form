@@ -59,6 +59,16 @@ function App() {
       ],
     ],
     password: ["", Validators.required("Kata sandi wajib diisi")],
+    confirmPassword: [
+      "",
+      [
+        Validators.required("Ketik ulang kata sandi wajib diisi"),
+        Validators.match(
+          "password",
+          "Ketik ulang kata sandi tidak sama dengan password"
+        ),
+      ],
+    ],
     nik: [
       "",
       [
@@ -431,6 +441,16 @@ function App() {
             <Components.Form.Input.Password
               {...(form.get("password") as FormControl).props}
               placeholder="Masukkan kata sandi Anda"
+            />
+          </Components.Form.Group>
+
+          <Components.Form.Group
+            label="Ketik Ulang Kata Sandi"
+            required={!form.get("confirmPassword").readonly}
+          >
+            <Components.Form.Input.Password
+              {...(form.get("confirmPassword") as FormControl).props}
+              placeholder="Ketik ulang kata kata sandi Anda"
             />
           </Components.Form.Group>
 
