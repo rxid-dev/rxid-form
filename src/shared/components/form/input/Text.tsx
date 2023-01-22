@@ -8,8 +8,9 @@ import { useControl } from "../../../../core/form/useControl";
 import { FormProps } from "../interface/FormProps";
 
 interface Props extends FormProps {
-  type?: "date" | "number" | "email";
+  type?: "date" | "number" | "email" | "password" | "text";
   componentLeft?: () => JSX.Element;
+  componentRight?: () => JSX.Element;
   props?: FormControlValueProps;
   name?: string;
 }
@@ -75,6 +76,9 @@ const InputWithControl: FunctionComponent<Props> = ({ control, ...props }) => {
               onChange={onChange}
               value={props.value || control?.nativeProps.value}
             />
+            {props.componentRight && (
+              <span className="input-group-text">{props.componentRight()}</span>
+            )}
           </div>
           {control?.touched && control.errors ? (
             <small className="text-danger">{control.errors?.message}</small>

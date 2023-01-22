@@ -5,6 +5,7 @@ import { InputDate } from "./Date";
 import { InputEmail } from "./Email";
 import { InputNumber } from "./Number";
 import { InputNumeric } from "./Numeric";
+import { InputPassword } from "./Password";
 import { InputTel } from "./Tel";
 import { InputText } from "./Text";
 export const Input = {
@@ -17,4 +18,5 @@ export const Input = {
   Tel: InputTel,
   Email: InputEmail,
   Custom: CustomInput,
+  Password: InputPassword,
 };

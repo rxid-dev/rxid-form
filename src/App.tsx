@@ -58,6 +58,7 @@ function App() {
         Validators.maxLength(10, "Nama tidak boleh lebih dari 7 karakter"),
       ],
     ],
+    password: ["", Validators.required("Kata sandi wajib diisi")],
     nik: [
       "",
       [
@@ -143,6 +144,7 @@ function App() {
       const record = {
         code: "XYZ",
         name: "John Doe",
+        password: "password",
         nik: "1234567890123456",
         npwp: "123456789012345",
         email: "johndoe@gmaol.com",
@@ -419,6 +421,16 @@ function App() {
             <Components.Form.Input.Text
               {...(form.get("name") as FormControl).props}
               placeholder="Masukkan nama Anda"
+            />
+          </Components.Form.Group>
+
+          <Components.Form.Group
+            label="Kata Sandi"
+            required={!form.get("password").readonly}
+          >
+            <Components.Form.Input.Password
+              {...(form.get("password") as FormControl).props}
+              placeholder="Masukkan kata sandi Anda"
             />
           </Components.Form.Group>
 
