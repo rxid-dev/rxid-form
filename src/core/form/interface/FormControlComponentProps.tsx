@@ -1,10 +1,9 @@
-import React from "react";
 import { FormControl, FormControlValueProps } from "../FormControl";
 import { FormGroup } from "../FormGroup";
-
-export interface FormControlProps {
-  ref: React.RefObject<FormControl | undefined>;
+export interface FormControlComponentProps {
   props: FormControlValueProps;
   name: string;
   parent?: FormGroup;
+  ref: React.RefObject<FormControl | undefined>;
+  placeholder?: string;
 }

@@ -4,15 +4,12 @@ import React, {
   useImperativeHandle,
 } from "react";
 import { FormControl, FormControlValueProps } from "../../../../core/form";
+import { FormProps } from "../../../../core/form/interface/FormProps";
 import { useControl } from "../../../../core/form/useControl";
-import { FormProps } from "../interface/FormProps";
-
 interface Props extends FormProps {
   type?: "date" | "number" | "email" | "password" | "text";
   componentLeft?: () => JSX.Element;
   componentRight?: () => JSX.Element;
-  props?: FormControlValueProps;
-  name?: string;
 }
 
 const InputTextComponent: ForwardRefRenderFunction<

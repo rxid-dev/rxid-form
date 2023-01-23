@@ -1,8 +1,8 @@
 import React, { ForwardRefRenderFunction, useImperativeHandle } from "react";
-import { FormControl } from "../../../core/form";
-import { FormControlProps } from "../../../core/form/interface/FormControlProps";
+import { FormControl, FormControlValueProps } from "../../../core/form";
+import { FormControlComponentProps } from "../../../core/form/interface/FormControlComponentProps";
 import { useControl } from "../../../core/form/useControl";
-interface Props extends FormControlProps {
+interface Props extends FormControlComponentProps {
   placeholder?: string;
 }
 
@@ -10,7 +10,10 @@ const TextAreaComponent: ForwardRefRenderFunction<
   FormControl | undefined,
   Props
 > = (props, ref) => {
-  const control = useControl(props.name, props.props);
+  const control = useControl(
+    props.name as string,
+    props.props as FormControlValueProps
+  );
   useImperativeHandle(ref, () => control);
   return (
     <>

@@ -4,11 +4,10 @@ import React, {
   useState,
 } from "react";
 import { FormControl } from "../../../core/form";
-import { FormControlProps } from "../../../core/form/interface/FormControlProps";
+import { FormControlOptionsComponentProps } from "../../../core/form/interface/FormControlOptionsComponentProps";
 import { useControl } from "../../../core/form/useControl";
 
-interface Props extends FormControlProps {
-  options?: Array<any>;
+interface Props extends FormControlOptionsComponentProps {
   onChange?: (value: any) => void;
 }
 

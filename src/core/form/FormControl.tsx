@@ -1,8 +1,8 @@
 import React, { createRef } from "react";
 import { AbstractControlProps } from "./interface/AbstractControlProps";
+import { FormControlComponentProps } from "./interface/FormControlComponentProps";
 import { FormControlNativeProps } from "./interface/FormControlNativeProps";
-import { FormControlOptionsProps } from "./interface/FormControlOptions";
-import { FormControlProps } from "./interface/FormControlProps";
+import { FormControlOptionsProps } from "./interface/FormControlOptionsProps";
 import { FormParentProps } from "./interface/FormParentProps";
 import { ValidationError } from "./type/ValidationError";
 import { ValidatorFn } from "./type/ValidationFN";
@@ -113,7 +113,7 @@ export class FormControl implements Props {
     }
   }
 
-  public get props(): FormControlProps {
+  public get props(): FormControlComponentProps {
     return {
       name: this.name,
       props: this._props,
@@ -158,7 +158,7 @@ export class FormControl implements Props {
     if (this.ref.current) {
       this.ref.current.validate();
     } else {
-      if (this.errors) return;
+      if (this.errors && this.touched) return;
       this.markAsTouched();
       this.errors = this.createErrors(this.value);
       this.isValid = !this.errors;
