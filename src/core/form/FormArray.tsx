@@ -60,9 +60,16 @@ export class FormArray implements FormArrayProps {
 
   public push(props: FormGroup): void {
     props.setParent(this.parent);
-    this.disabled && props.disable();
-    this.readonly && props.setReadOnly();
+    if (this.disabled || this.parent?.parent?.disabled) {
+      props.disable();
+    }
+
+    if (this.readonly || this.parent?.parent?.readonly) {
+      props.setReadOnly();
+    }
+
     this.controls.push(props);
+
     this.reloadState();
   }
 

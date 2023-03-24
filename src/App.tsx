@@ -35,109 +35,114 @@ function App() {
     ],
   });
 
-  const form = useForm({
-    // start example
-    validators: [""],
-    validatorsInput: [""],
-    alphaNumeric: ["123xYZ"],
-    currency: ["123456789", Validators.required("Currency wajib diisi")],
-    tel: ["0123456789", Validators.required("Tel wajib diisi")],
-    // end example
-    code: [
-      "",
-      [
-        Validators.required("Code wajib diisi"),
-        Validators.regex("^[A-Z]*$", "Format code tidak valid"),
+  const form = useForm(
+    {
+      // start example
+      validators: [""],
+      validatorsInput: [""],
+      alphaNumeric: ["123xYZ"],
+      currency: ["123456789", Validators.required("Currency wajib diisi")],
+      tel: ["0123456789", Validators.required("Tel wajib diisi")],
+      // end example
+      code: [
+        "",
+        [
+          Validators.required("Code wajib diisi"),
+          Validators.regex("^[A-Z]*$", "Format code tidak valid"),
+        ],
       ],
-    ],
-    name: [
-      "",
-      [
-        Validators.required("Nama wajib diisi"),
-        Validators.minLength(4, "Nama tidak boleh kurang dari 4 karakter"),
-        Validators.maxLength(10, "Nama tidak boleh lebih dari 7 karakter"),
+      name: [
+        "",
+        [
+          Validators.required("Nama wajib diisi"),
+          Validators.minLength(4, "Nama tidak boleh kurang dari 4 karakter"),
+          Validators.maxLength(10, "Nama tidak boleh lebih dari 7 karakter"),
+        ],
       ],
-    ],
-    password: ["", Validators.required("Kata sandi wajib diisi")],
-    confirmPassword: [
-      "",
-      [
-        Validators.required("Ketik ulang kata sandi wajib diisi"),
-        Validators.match(
-          "password",
-          "Ketik ulang kata sandi tidak sama dengan password"
-        ),
+      password: ["", Validators.required("Kata sandi wajib diisi")],
+      confirmPassword: [
+        "",
+        [
+          Validators.required("Ketik ulang kata sandi wajib diisi"),
+          Validators.match(
+            "password",
+            "Ketik ulang kata sandi tidak sama dengan password"
+          ),
+        ],
       ],
-    ],
-    nik: [
-      "",
-      [
-        Validators.required("NIK wajib diisi"),
-        Validators.number("NIK harus terdiri dari angka"),
-        Validators.actualLength(16, "NIK harus tediri dari 16 angka"),
+      nik: [
+        "",
+        [
+          Validators.required("NIK wajib diisi"),
+          Validators.number("NIK harus terdiri dari angka"),
+          Validators.actualLength(16, "NIK harus tediri dari 16 angka"),
+        ],
       ],
-    ],
-    email: [
-      "",
-      [Validators.required("Alamat email wajib diisi"), Validators.email()],
-    ],
-    dob: ["", Validators.required("Tanggal lahir wajib dipilih")],
-    age: [
-      "",
-      [
-        Validators.required("Usia wajib diisi"),
-        Validators.number("Usia harus terdiri dari angka"),
-        Validators.min(17, "Anda harus berusia diatas 16 tahun"),
-        Validators.max(30, "Anda harus berusia kurang dari 31 tahun"),
+      email: [
+        "",
+        [Validators.required("Alamat email wajib diisi"), Validators.email()],
       ],
-    ],
-    // address: ["", Validators.required("Alamat wajib diisi")],
-    maritalStatus: [
-      "",
-      Validators.required("Statis perkawinan wajib dipilih"),
-      {
-        toDTO: (value: StatusPerkawinanModel) => {
-          return {
-            marital_status_id: value.id,
-          };
+      dob: ["", Validators.required("Tanggal lahir wajib dipilih")],
+      age: [
+        "",
+        [
+          Validators.required("Usia wajib diisi"),
+          Validators.number("Usia harus terdiri dari angka"),
+          Validators.min(17, "Anda harus berusia diatas 16 tahun"),
+          Validators.max(30, "Anda harus berusia kurang dari 31 tahun"),
+        ],
+      ],
+      // address: ["", Validators.required("Alamat wajib diisi")],
+      maritalStatus: [
+        "",
+        Validators.required("Statis perkawinan wajib dipilih"),
+        {
+          toDTO: (value: StatusPerkawinanModel) => {
+            return {
+              marital_status_id: value.id,
+            };
+          },
         },
-      },
-    ],
-    gender: [
-      "",
-      Validators.required("Jenis kelamin wajib dipilih"),
-      {
-        toModel: (value) => {
-          return {
-            id: value.gender_id,
-            name: value.gender_name,
-          };
+      ],
+      gender: [
+        "",
+        Validators.required("Jenis kelamin wajib dipilih"),
+        {
+          toModel: (value) => {
+            return {
+              id: value.gender_id,
+              name: value.gender_name,
+            };
+          },
+          toDTO: (value: JenisKelaminModel) => {
+            return {
+              gender_id: value.id,
+            };
+          },
         },
-        toDTO: (value: JenisKelaminModel) => {
-          return {
-            gender_id: value.id,
-          };
+      ],
+      hobi: [
+        "",
+        Validators.required("Hobi wajib dipilih"),
+        {
+          toDTO: (values: Array<HobiModel>) => {
+            return {
+              hobbie_ids: values.map((val) => val.id),
+            };
+          },
         },
-      },
-    ],
-    hobi: [
-      "",
-      Validators.required("Hobi wajib dipilih"),
-      {
-        toDTO: (values: Array<HobiModel>) => {
-          return {
-            hobbie_ids: values.map((val) => val.id),
-          };
-        },
-      },
-    ],
-    termAndCondition: [
-      false,
-      Validators.required("Syarat dan ketentuan wajib disetujui"),
-    ],
-    address: formBuilder.array(),
-    custom: ["", Validators.required("Custom wajib diisi")],
-  });
+      ],
+      termAndCondition: [
+        false,
+        Validators.required("Syarat dan ketentuan wajib disetujui"),
+      ],
+      address: formBuilder.array(),
+      custom: ["", Validators.required("Custom wajib diisi")],
+    },
+    {
+      readonly: true,
+    }
+  );
 
   const control = useControl("npwp", [
     "",
@@ -146,6 +151,9 @@ function App() {
       Validators.number("NPWP harus tediri dari angka"),
       Validators.actualLength(15, "NPWP harus tediri dari 15 digit"),
     ],
+    {
+      readonly: true,
+    },
   ]);
 
   useEffect(() => {
@@ -300,9 +308,6 @@ function App() {
         </button>
         <br />
         <br />
-        <Components.Example />
-        <br />
-        <br />
         <Components.Form.Group
           label="Custom Input"
           required={!form.get("validators").readonly}
@@ -375,7 +380,7 @@ function App() {
               Reset
             </button>
             <button
-              className="btn btn-primary btn-sm"
+              className="btn btn-primary btn-sm me-2"
               onClick={() => {
                 control.validate();
                 if (control.isValid) {
@@ -385,6 +390,22 @@ function App() {
               }}
             >
               Submit
+            </button>
+            <button
+              className="btn btn-primary btn-sm me-2"
+              onClick={() => {
+                control.setReadOnly(true, true);
+              }}
+            >
+              Read Only
+            </button>
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => {
+                control.setReadOnly(false, true);
+              }}
+            >
+              Write Form
             </button>
           </div>
         )}
@@ -577,20 +598,24 @@ function App() {
                 <Components.Card
                   header={"Alamat ke-" + (index + 1)}
                   key={index}
-                  headerRight={() => (
-                    <button
-                      className="btn btn-danger btn-sm"
-                      type="button"
-                      onClick={() => {
-                        const formArray: FormArray = form.get(
-                          "address"
-                        ) as FormArray;
-                        formArray.removeAt(index);
-                      }}
-                    >
-                      <em className="fas fa-times" />
-                    </button>
-                  )}
+                  headerRight={() =>
+                    formGroup.readonly ? (
+                      <></>
+                    ) : (
+                      <button
+                        className="btn btn-danger btn-sm"
+                        type="button"
+                        onClick={() => {
+                          const formArray: FormArray = form.get(
+                            "address"
+                          ) as FormArray;
+                          formArray.removeAt(index);
+                        }}
+                      >
+                        <em className="fas fa-times" />
+                      </button>
+                    )
+                  }
                 >
                   <Components.Form.Group
                     label="Street"

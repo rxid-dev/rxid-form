@@ -165,6 +165,7 @@ export class FormGroup implements FormGroupProps {
     Object.keys(this.controls).forEach((key: string) => {
       this.get(key).setReadOnly(readOnly);
     });
+    this.reloadState();
   }
 
   private reloadState(): void {
