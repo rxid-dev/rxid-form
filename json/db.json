@@ -1,0 +1,84 @@
+{
+  "country": [
+    {
+      "id": 1,
+      "name": "Indonesia"
+    },
+    {
+      "id": 2,
+      "name": "Malaysia"
+    },
+    {
+      "id": 3,
+      "name": "Singapura"
+    },
+    {
+      "id": 4,
+      "name": "Filipina"
+    },
+    {
+      "id": 5,
+      "name": "Thailand"
+    },
+    {
+      "id": 6,
+      "name": "Myanmar"
+    },
+    {
+      "id": 7,
+      "name": "Kamboja"
+    },
+    {
+      "id": 8,
+      "name": "Laos"
+    },
+    {
+      "id": 9,
+      "name": "Timor Leste"
+    },
+    {
+      "id": 10,
+      "name": "Australia"
+    },
+    {
+      "id": 11,
+      "name": "China"
+    },
+    {
+      "id": 12,
+      "name": "Rusia"
+    },
+    {
+      "id": 13,
+      "name": "Amerika Serikat"
+    },
+    {
+      "id": 14,
+      "name": "Prancis"
+    },
+    {
+      "id": 15,
+      "name": "Italia"
+    },
+    {
+      "id": 16,
+      "name": "India"
+    },
+    {
+      "id": 17,
+      "name": "Brazil"
+    },
+    {
+      "id": 18,
+      "name": "Argentina"
+    },
+    {
+      "id": 19,
+      "name": "Portugal"
+    },
+    {
+      "id": 20,
+      "name": "Mexico"
+    }
+  ]
+}
