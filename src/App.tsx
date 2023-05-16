@@ -675,6 +675,8 @@ function App() {
                     <Components.Form.Autocomplete
                       {...(formGroup.get("country") as FormControl).props}
                       placeholder="Masukkan nama negara"
+                      searchPlaceholder="Cari negara..."
+                      stringUrl="/country"
                     />
                   </Components.Form.Group>
 

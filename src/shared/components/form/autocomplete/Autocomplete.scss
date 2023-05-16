@@ -7,14 +7,23 @@ div.auto-complete {
   ul.list {
     padding: 0;
     margin: 0;
+    max-height: 150px;
+    overflow: auto;
     li.list-item {
       list-style: none;
       padding: 0.2em 1em;
       &:hover,
       &.active {
-        background-color: var(--bs-primary);
-        cursor: pointer;
-        color: #ffffff;
+        &:not(.not-found) {
+          background-color: var(--bs-primary);
+          cursor: pointer;
+          color: #ffffff;
+        }
+      }
+      &.not-found {
+        text-align: center;
+        color: var(--bs-secondary);
+        padding: 1em;
       }
     }
   }
